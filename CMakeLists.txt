@@ -19,6 +19,8 @@ include(HandleLLVMOptions)
 include_directories(${LLVM_INCLUDE_DIRS} ${MLIR_INCLUDE_DIRS})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# 设置生成的dialect的头文件路径
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 
 add_subdirectory(include/toy)

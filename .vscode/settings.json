@@ -4,5 +4,5 @@
             "/Users/chendongsheng/github/mlir_cds/test.mlir"
         ]
     },
-    "mlir.server_path":"/usr/local/cds_bin/bin/mlir-lsp-server"
+    "mlir.server_path":"/usr/local/cds_bin/bin/mlir-lsp-server",
 }
