@@ -102,4 +102,26 @@ same with op conversion.
 
 ## 4. mlir图结构
 
-## 5. 
+## 5. 基本的dialect工程
+
+1. ToyDialect.td 定义Dialect的名字和cpp命名空间
+2. ToyOps.td 定义OP
+3. Toy.td 将 1 和 2 连接在一起,用于 `tablegen` 生成
+4. 用于 `cmake` 生成
+```cmake
+# Toy 是方言名字
+# toy是指toy.td
+# 该定义会生成一个名为 MLIRxxxIncGen的cmake target
+add_mlir_dialect(Toy toy)
+```
+5. `build/include/toy` 生成在这里,
+    1. ToyDialect.{h,cpp}.inc：存 Dialect 的定义和实现
+    2. Toy.{h,cpp}.inc：存 Op 的定义和实现
+6. `ToyDialect.h` 加载 `Dialect` 的定义
+7. `ToyOps.h` 加载 `OP` 的定义
+8. `toy.cpp` 加载 `Dialect` 和 `OP`
+9. 编译刚刚所有的代码
+```cmake
+
+add_mlir_library(Toy toy.cpp DEPENDS MLIRToyIncGen)
+```
