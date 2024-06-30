@@ -125,3 +125,41 @@ add_mlir_dialect(Toy toy)
 
 add_mlir_library(Toy toy.cpp DEPENDS MLIRToyIncGen)
 ```
+## 6. pass
+
+tablegen 来定义 Pass
+
+1. 创建ToyPasses.td
+2. cmake配置生成代码
+    ```cmake
+    set(LLVM_TARGET_DEFINITIONS ToyPasses.td)
+    mlir_tablegen(ToyPasses.h.inc -gen-pass-decls)
+    add_public_tablegen_target(MLIRToyTransformsIncGen)
+    ```
+3. 声明pass的头文件 ToyPasses.h：Pass 的头文件
+4. 声明pass的实现 Transforms/ConvertToyToArith.cpp：一个基本实现
+5. cmake添加上library
+```cmake
+add_mlir_library(
+  ToyTransforms
+  ConvertToyToArith.cpp
+  DEPENDS MLIRToyTransformsIncGen
+)
+```
+6. 注册pass
+```c++
+toy::registerPasses();
+return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt", registry));
+```
+
+定义pass的执行
+1. pass在指定op上执行
+2. pass在指定interface上执行
+
+
+
+## 7. pattern rewrite
+
+## 8. 如何自定义type
+
+

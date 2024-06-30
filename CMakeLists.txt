@@ -25,7 +25,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 
 add_subdirectory(include/toy)
 add_subdirectory(lib)
-add_subdirectory(tools)
+add_subdirectory(tools/toy-opt)
 
 add_executable(mlir-toy main.cpp)
 target_link_libraries(
