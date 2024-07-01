@@ -125,6 +125,89 @@ add_mlir_dialect(Toy toy)
 
 add_mlir_library(Toy toy.cpp DEPENDS MLIRToyIncGen)
 ```
+
+
+## --TableGen OP 详细介绍
+
+- `ToyOps.td` : OP定义文件
+
+
+
+1. 声明一个`ToyOp`, 继承父`Op`对象.
+
+```c++
+// mnemonic 指名字, list<Trait> 是指有一系列特性
+class ToyOp<string mnemonic, list<Trait> traits = []> :
+  Op<ToyDialect, mnemonic, traits>;
+```
+
+2. 定义OP
+
+   1. `add` 是这个OP的名字
+
+   2. `Constraint` :  约束是指属性和数据类型的约束.
+
+      1. `Attribute`: 常见的属性   `mlir/IR/CommonAttrConstraints.td`
+      2. `Type`: 内置的数据类型
+
+   3. `Verify`
+
+      1. 在OP声明的时候加上 `let hasVerifier=true`
+
+      2. 在`toy.cpp`中实现该 `verifier`
+
+         1. ```c++
+            using namespace mlir;
+            LogicalResult SubOp::verify() {
+              if (getLhs().getType() != getRhs().getType())
+                return this->emitError() << "Lhs Type " << getLhs().getType()
+                  << " not equal to rhs " << getRhs().getType(); 
+              return success();
+            }
+            ```
+
+   4. Builder: 自定义 构造函数
+
+      1. ```c++
+         let builders = [
+             OpBuilder<
+               (ins "mlir::Value":$lhs, "mlir::Value":$rhs),
+               "build($_builder, $_state, lhs.getType(), lhs, rhs);"
+             >
+           ];
+         ```
+
+      2. 首先，mlir 会自动为我们生成 `build($_builder, $_state, ResultType, LhsValue, RhsValue)` 的 builder
+
+      3. 我们的 builder 通过 `lhs.getType()` 推断 result 的类型，并调用 mlir 生成好的 builder，实现自动推断类型
+
+```c++
+def SubOp : ToyOp<"sub", [Pure]> {
+  let summary = "sub operation";
+  //   在arguments字段里,添加Attribute属性
+  let arguments = (ins AnyInteger:$lhs, AnyInteger:$rhs);
+  let results = (outs AnyInteger:$result);
+// 在这里添加需要验证的标记,然后在cpp文件中,实现该验证方法.
+  let hasVerifier = true;
+  // 新增构造函数
+  let builders = [
+    OpBuilder<
+      (ins "mlir::Value":$lhs, "mlir::Value":$rhs),
+      "build($_builder, $_state, lhs.getType(), lhs, rhs);"
+    >
+  ];
+  
+  // 自定义函数
+  let extraClassDeclaration = [{
+    int64_t getBitWidth() {
+      return getResult().getType().getWidth();
+    }
+  }];
+}
+```
+
+
+
 ## 6. pass
 
 tablegen 来定义 Pass
@@ -161,5 +244,4 @@ return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt", registry));
 ## 7. pattern rewrite
 
 ## 8. 如何自定义type
-
 

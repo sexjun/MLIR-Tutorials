@@ -16,5 +16,6 @@ int main(int argc, char ** argv) {
   // 注册两个 Pass
   registerCSEPass();
   registerCanonicalizerPass();
-  return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt", registry));
+  toy::registerPasses();
+  return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt-cds", registry));
 }

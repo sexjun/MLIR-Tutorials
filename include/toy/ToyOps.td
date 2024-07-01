@@ -5,10 +5,11 @@ include "mlir/IR/OpBase.td"
 include "toy/ToyDialect.td"
 include "mlir/Interfaces/SideEffectInterfaces.td"
 
-// mnemonic 指名字
+// mnemonic 指名字, list<Trait> 是指有一系列特性
 class ToyOp<string mnemonic, list<Trait> traits = []> :
   Op<ToyDialect, mnemonic, traits>;
 
+// ”adda" is the name of OP
 // Pure 是 Trait，表示没有 SideEffect 的纯函数
 def AddOp : ToyOp<"add", [Pure]> {
   let summary = "add operation";

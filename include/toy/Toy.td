@@ -3,6 +3,5 @@
 
 include "toy/ToyDialect.td"
 include "toy/ToyOps.td"
-// include "toy/ToyPasses.td"
 
 #endif
