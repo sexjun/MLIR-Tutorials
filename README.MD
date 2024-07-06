@@ -104,6 +104,44 @@ same with op conversion.
 
 ## 5. 基本的dialect工程
 
+
+
+[cmkae mlir结合使用指南](https://mlir.llvm.org/docs/Tutorials/CreatingADialect/)
+
+对于 方言 + OP
+
+```cmake
+add_mlir_dialect(Toy toy)
+
+1. 新建一个文件
+2. 包含方言和OP的定义
+## file name: Toy.td
+
+#ifndef TOY_TD
+#define TOY_TD
+include "toy/ToyDialect.td"
+include "toy/ToyOps.td"
+
+#endif
+
+
+# set(LLVM_TARGET_DEFINITIONS Toy.td)
+# mlir_tablegen(Toy.h.inc -gen-op-decls)
+# mlir_tablegen(Toy.cpp.inc -gen-op-defs)
+# mlir_tablegen(ToyDialect.h.inc -gen-dialect-decls)
+# mlir_tablegen(ToyDialect.cpp.inc -gen-dialect-defs)
+# add_public_tablegen_target(MLIRToyIncGen)
+
+add_mlir_dialect(Toy toy)
+
+```
+
+
+
+
+
+
+
 1. ToyDialect.td 定义Dialect的名字和cpp命名空间
 2. ToyOps.td 定义OP
 3. Toy.td 将 1 和 2 连接在一起,用于 `tablegen` 生成
@@ -210,6 +248,107 @@ def SubOp : ToyOp<"sub", [Pure]> {
 
 ## 6. pass
 
+pass分为二种
+
+1. OP pass: 在某类型OP上运行的pass
+2. interface pass: 在特定op interface上执行的pass
+
+它们两个的区别是，Pass 里面 `getOperation()` 返回的是 Operation 还是 Interface。
+
+### 6.1. OP pass
+
+1. **CRTP**继承`OperationPass`
+2. 重写虚函数 `void runOnOperation()`
+
+- 与OP无关的pass (所有op都执行)
+
+```c++
+/// Here we utilize the CRTP `PassWrapper` utility class to provide some
+/// necessary utility hooks. This is only necessary for passes defined directly
+/// in C++. Passes defined declaratively use a cleaner mechanism for providing
+/// these utilities.
+struct MyOperationPass : public PassWrapper<MyOperationPass, OperationPass<>> {
+  void runOnOperation() override {
+    // Get the current operation being operated on.
+    Operation *op = getOperation();
+    ...
+  }
+};
+```
+
+- 带有过滤的针对OP执行的pass
+
+```c++
+struct MyFunctionPass : public PassWrapper<MyOperationPass, OperationPass<>> {
+  /// This method is used to provide additional static filtering, and returns if the
+  /// pass may be scheduled on the given operation type.
+  bool canScheduleOn(RegisteredOperationName opInfo) const override {
+    return opInfo.hasInterface<FunctionOpInterface>();
+  }
+
+  void runOnOperation() {
+    // Here we can freely cast to FunctionOpInterface, because our `canScheduleOn` ensures
+    // that our pass is only executed on operations implementing that interface.
+    FunctionOpInterface op = cast<FunctionOpInterface>(getOperation()); 
+  }
+};
+```
+
+- 基于过滤OP执行pass的基础,提供语法糖,仅针对某一类型OP执行的pass
+
+```c++
+/// Here we utilize the CRTP `PassWrapper` utility class to provide some
+/// necessary utility hooks. This is only necessary for passes defined directly
+/// in C++. Passes defined declaratively use a cleaner mechanism for providing
+/// these utilities.
+struct MyFunctionPass : public PassWrapper<MyOperationPass, OperationPass<func::FuncOp>> {
+  void runOnOperation() {
+    // Get the current operation being operated on.
+    func::FuncOp op = getOperation();
+  }
+};
+```
+
+- 按照接口进行过滤
+
+```c++
+/// Here we utilize the CRTP `PassWrapper` utility class to provide some
+/// necessary utility hooks. This is only necessary for passes defined directly
+/// in C++. Passes defined declaratively use a cleaner mechanism for providing
+/// these utilities.
+struct MyFunctionPass : public PassWrapper<MyOperationPass, InterfacePass<FunctionOpInterface>> {
+  void runOnOperation() {
+    // Get the current operation being operated on.
+    FunctionOpInterface op = getOperation();
+  }
+};
+```
+
+### 6.2 pass manager
+
+1. `Passmanager`       `OppassManager`
+
+
+
+```c++
+// Create a top-level `PassManager` class.
+auto pm = PassManager::on<ModuleOp>(ctx);
+
+// Add a pass on the top-level module operation.
+pm.addPass(std::make_unique<MyModulePass>());
+
+
+void registerMyPass() {
+  PassRegistration<MyPass>();
+}
+```
+
+
+
+
+
+
+
 tablegen 来定义 Pass
 
 1. 创建ToyPasses.td
@@ -242,6 +381,59 @@ return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt", registry));
 
 
 ## 7. pattern rewrite
+
+ODS有3种:
+
+1. 直接在`td` 文件中实现
+
+2. 在`td` 文件中声明, 然后`c++` 函数做具体实现.
+
+3. 给`op`声明 `let hasCanonicalizeMethod = 1;`属性,然后在
+
+   1. `LogicalResult circt::MulOp::canonicalize(MulOp op, PatternRewriter &rewriter) ` 函数中实现.
+
+4. 使用`RwritePattern` 
+
+   ```c++
+   struct ConvertTFLeakyRelu : public RewritePattern {
+     ConvertTFLeakyRelu(MLIRContext *context)
+         : RewritePattern("tf.LeakyRelu", 1, context) {}
+   
+     LogicalResult match(Operation *op) const override {
+       return success();
+     }
+   
+     void rewrite(Operation *op, PatternRewriter &rewriter) const override {
+       rewriter.replaceOpWithNewOp<TFL::LeakyReluOp>(
+           op, op->getResult(0).getType(), op->getOperand(0),
+           /*alpha=*/op->getAttrOfType<FloatAttr>("alpha"));
+     }
+   };
+   ```
+
+   
+
+
+
+
+
+
+
+## 7.3 PDL 
+
+> https://mlir.llvm.org/docs/PDLL/#
+
+- 已经有pattern rewrite了,为什么还要PDL呢?
+
+​	PDL 语言 (PDLL) 提供了一种从头开始设计的声明性模式语言，用于表示 MLIR 模式重写。 PDLL 旨在通过直观的界面原生支持在所有 MLIR 构造上编写匹配器，该界面可用于提前 (AOT) 和即时 (JIT) 模式编译。
+
+​	Tablegen DRR (TDRR)，即表驱动的声明性重写规则，是一种声明性 DSL,TableGen 语言不像 LLVM 那样适合 MLIR 模式的结构。
+
+​	TDRR 的问题很大程度上源于使用 TableGen 作为 DSL 的宿主语言。这些问题的根源在于 TableGen 的结构与 MLIR 的结构不匹配，以及 TableGen 与 MLIR 的动机目标不同。
+
+
+
+
 
 ## 8. 如何自定义type
 
