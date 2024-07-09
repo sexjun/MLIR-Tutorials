@@ -165,7 +165,32 @@ add_mlir_library(Toy toy.cpp DEPENDS MLIRToyIncGen)
 ```
 
 
-## --TableGen OP 详细介绍
+
+这样完成后就可以通过:  `cse` 和 `canonicalize` 了. 为什么呢? 因为我们给OP 定义了`PURE`属性.
+
+```c++
+
+./toy-opt-cds -cse  /Users/chendongsheng/github/mlir_cds/cases/cse.mlir
+./toy-opt-cds -canonicalize  /Users/chendongsheng/github/mlir_cds/cases/cse.mlir
+```
+
+### 5.1 OP verify
+
+定义 OP 的时候,加上`let hasVerifier = true;` 属性,则可以在`toy.cpp`文件中添加;
+
+```c++
+using namespace mlir;
+LogicalResult SubOp::verify() {
+  if (getLhs().getType() != getRhs().getType())
+    return this->emitError() << "Lhs Type " << getLhs().getType()
+      << " not equal to rhs " << getRhs().getType();
+  return success();
+}
+```
+
+进行OP的验证.
+
+### 5.2 TableGen OP 详细介绍
 
 - `ToyOps.td` : OP定义文件
 

@@ -6,6 +6,7 @@ struct ConvertToyToArithPass : toy::impl::ConvertToyToArithBase<ConvertToyToArit
   using toy::impl::ConvertToyToArithBase<ConvertToyToArithPass>::ConvertToyToArithBase;
   void runOnOperation() final {
     llvm::errs() << "get name: " << name << "\n";
+    llvm::outs() << "----------> tag" << "\n";
   }
 };
 

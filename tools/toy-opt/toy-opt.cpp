@@ -11,8 +11,14 @@
 using namespace mlir;
 using namespace llvm;
 
+#include "llvm/Support/Debug.h"
+#define DEBUG_TYPE "my-mlir-pass"
+
 int main(int argc, char ** argv) {
   DialectRegistry registry;
+
+    LLVM_DEBUG(llvm::dbgs() << "Running my MLIR pass\n");
+
   // 注册 Dialect
   registry.insert<toy::ToyDialect, func::FuncDialect>();
   // 注册两个 Pass
