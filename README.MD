@@ -224,7 +224,7 @@ class ToyOp<string mnemonic, list<Trait> traits = []> :
             LogicalResult SubOp::verify() {
               if (getLhs().getType() != getRhs().getType())
                 return this->emitError() << "Lhs Type " << getLhs().getType()
-                  << " not equal to rhs " << getRhs().getType(); 
+                  << " not equal to rhs " << getRhs().getType();
               return success();
             }
             ```
@@ -259,7 +259,7 @@ def SubOp : ToyOp<"sub", [Pure]> {
       "build($_builder, $_state, lhs.getType(), lhs, rhs);"
     >
   ];
-  
+
   // 自定义函数
   let extraClassDeclaration = [{
     int64_t getBitWidth() {
@@ -314,7 +314,7 @@ struct MyFunctionPass : public PassWrapper<MyOperationPass, OperationPass<>> {
   void runOnOperation() {
     // Here we can freely cast to FunctionOpInterface, because our `canScheduleOn` ensures
     // that our pass is only executed on operations implementing that interface.
-    FunctionOpInterface op = cast<FunctionOpInterface>(getOperation()); 
+    FunctionOpInterface op = cast<FunctionOpInterface>(getOperation());
   }
 };
 ```
@@ -417,17 +417,17 @@ ODS有3种:
 
    1. `LogicalResult circt::MulOp::canonicalize(MulOp op, PatternRewriter &rewriter) ` 函数中实现.
 
-4. 使用`RwritePattern` 
+4. 使用`RwritePattern`
 
    ```c++
    struct ConvertTFLeakyRelu : public RewritePattern {
      ConvertTFLeakyRelu(MLIRContext *context)
          : RewritePattern("tf.LeakyRelu", 1, context) {}
-   
+
      LogicalResult match(Operation *op) const override {
        return success();
      }
-   
+
      void rewrite(Operation *op, PatternRewriter &rewriter) const override {
        rewriter.replaceOpWithNewOp<TFL::LeakyReluOp>(
            op, op->getResult(0).getType(), op->getOperand(0),
@@ -436,7 +436,6 @@ ODS有3种:
    };
    ```
 
-   
 
 
 
@@ -444,7 +443,8 @@ ODS有3种:
 
 
 
-## 7.3 PDL 
+
+## 7.3 PDL
 
 > https://mlir.llvm.org/docs/PDLL/#
 

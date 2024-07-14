@@ -1,2 +1,4 @@
-add_mlir_library(Toy toy.cpp DEPENDS MLIRToyIncGen)
+
+add_subdirectory(Conversion)
+add_subdirectory(IR)
 add_subdirectory(Transforms)

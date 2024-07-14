@@ -63,6 +63,7 @@ void FuncOp::print(mlir::OpAsmPrinter &p) {
       getArgAttrsAttrName(), getResAttrsAttrName());
 }
 
+// 该函数实现在OP定义的时候(ODS), hasverify字段的检验函数.
 LogicalResult SubOp::verify() {
   if (getLhs().getType() != getRhs().getType())
     return this->emitError() << "Lhs Type " << getLhs().getType()

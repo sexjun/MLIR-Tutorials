@@ -4,7 +4,8 @@
     ],
     "cmake.debugConfig": {
         "args": [
-            "/Users/chendongsheng/github/mlir_cds/test.mlir"
+            "--convert-toy-to-arith",
+            "/Users/chendongsheng/github/mlir_cds/cases/cse.mlir"
         ],
     },
     "mlir.server_path": "/usr/local/cds_bin/bin/mlir-lsp-server",

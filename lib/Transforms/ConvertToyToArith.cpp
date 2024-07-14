@@ -6,10 +6,11 @@ struct ConvertToyToArithPass : toy::impl::ConvertToyToArithBase<ConvertToyToArit
   using toy::impl::ConvertToyToArithBase<ConvertToyToArithPass>::ConvertToyToArithBase;
   void runOnOperation() final {
     llvm::errs() << "get name: " << name << "\n";
-    llvm::outs() << "----------> tag" << "\n";
+    llvm::outs() << "----------> ConvertToyToArithPass run" << "\n";
   }
 };
 
+// 在passes.td中声明的构造函数,需要在这里实现.
 std::unique_ptr<mlir::Pass> toy::createConvertToyToArithPass(ConvertToyToArithOptions options) {
   return std::make_unique<ConvertToyToArithPass>(options);
 }
