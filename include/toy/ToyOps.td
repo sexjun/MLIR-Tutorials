@@ -9,6 +9,9 @@ include "mlir/Interfaces/FunctionInterfaces.td"
 include "mlir/Interfaces/ControlFlowInterfaces.td"
 include "mlir/IR/RegionKindInterface.td"
 
+// add op interface header
+include "mlir/Interfaces/CallInterfaces.td"
+
 // mnemonic 指名字, list<Trait> 是指有一系列特性
 class ToyOp<string mnemonic, list<Trait> traits = []> :
   Op<ToyDialect, mnemonic, traits>;

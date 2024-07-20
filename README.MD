@@ -405,7 +405,7 @@ return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt", registry));
 
 
 
-## 7. pattern rewrite
+## 7. pattern rewrite (toy-3)
 
 ODS有3种:
 
@@ -423,11 +423,11 @@ ODS有3种:
    struct ConvertTFLeakyRelu : public RewritePattern {
      ConvertTFLeakyRelu(MLIRContext *context)
          : RewritePattern("tf.LeakyRelu", 1, context) {}
-
+   
      LogicalResult match(Operation *op) const override {
        return success();
      }
-
+   
      void rewrite(Operation *op, PatternRewriter &rewriter) const override {
        rewriter.replaceOpWithNewOp<TFL::LeakyReluOp>(
            op, op->getResult(0).getType(), op->getOperand(0),
