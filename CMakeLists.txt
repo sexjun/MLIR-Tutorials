@@ -36,5 +36,5 @@ target_link_libraries(
 
 add_subdirectory(include)
 add_subdirectory(lib)
-add_subdirectory(tools/toy-opt)
 add_custom_target(header ALL DEPENDS MLIRToyIncGen)
+add_subdirectory(tools)
