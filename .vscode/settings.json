@@ -3,19 +3,18 @@
         "-DCMAKE_CXX_FLAGS=-fuse-ld=lld",
     ],
     "cmake.debugConfig": {
+        "cwd": "${workspaceFolder}/",
         "args": [
-            "--convert-toy-to-arith",
-            "/Users/chendongsheng/github/mlir_cds/cases/cse.mlir"
+            // "--convert-toy-to-arith",
+            "--CdsDemoPass",
+            "${workspaceFolder}/cases/cse.mlir"
         ],
     },
-    "mlir.server_path": "/usr/local/cds_bin/bin/mlir-lsp-server",
-    "workbench.colorCustomizations": {
-        "sash.hoverBorder": "#fa1b49",
-        "statusBar.background": "#dd0531",
-        "statusBar.foreground": "#e7e7e7",
-        "statusBarItem.hoverBackground": "#fa1b49",
-        "statusBarItem.remoteBackground": "#dd0531",
-        "statusBarItem.remoteForeground": "#e7e7e7"
-    },
+    // "mlir.server_path": "/home/cds/app/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04/bin/mlir-lsp-server",
     "peacock.color": "#dd0531",
+    "files.associations": {
+        "*.inc": "cpp"
+    },
+    "[cmake]": {
+    }
 }

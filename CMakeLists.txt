@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28.0)
+cmake_minimum_required(VERSION 3.22.0)
 project(cds_mlir VERSION 0.1.0 LANGUAGES C CXX)
 
 cmake_policy(SET CMP0116 NEW)

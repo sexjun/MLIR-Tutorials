@@ -14,17 +14,28 @@ using namespace llvm;
 #include "llvm/Support/Debug.h"
 #define DEBUG_TYPE "my-mlir-pass"
 
+#include "mlir/Dialect/Linalg/IR/Linalg.h"
+#include "mlir/Dialect/Linalg/TransformOps/DialectExtension.h"
+
+#include "CdsDemo/CdsDemoPasses.h"
+
 int main(int argc, char ** argv) {
   DialectRegistry registry;
 
     LLVM_DEBUG(llvm::dbgs() << "Running my MLIR pass\n");
 
   // 注册 Dialect
-  registry.insert<toy::ToyDialect, func::FuncDialect>();
-  // 注册两个 Pass
-  registerCSEPass();
-  registerCanonicalizerPass();
-  // register pass
-  toy::registerPasses();
-  return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt-cds", registry));
+    registry
+        .insert<toy::ToyDialect, func::FuncDialect, linalg::LinalgDialect>();
+
+    // 注册两个 Pass
+    registerCSEPass();
+    registerCanonicalizerPass();
+
+    // register pass
+    toy::registerPasses();
+
+    mlir::cdsdemo::registerCdsPasses();
+
+    return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt-cds", registry));
 }

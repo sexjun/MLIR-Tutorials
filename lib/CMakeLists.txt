@@ -1,4 +1,2 @@
-
-add_subdirectory(Conversion)
-add_subdirectory(IR)
-add_subdirectory(Transforms)
+add_subdirectory(toy)
+add_subdirectory(CdsDemo)
