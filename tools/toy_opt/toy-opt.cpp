@@ -35,7 +35,7 @@ int main(int argc, char ** argv) {
     // register pass
     toy::registerPasses();
 
-    mlir::cdsdemo::registerCdsPasses();
+    mlir::cdsdemo::registerPasses();
 
     return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt-cds", registry));
 }

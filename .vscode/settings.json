@@ -7,7 +7,8 @@
         "args": [
             // "--convert-toy-to-arith",
             "--CdsDemoPass",
-            "${workspaceFolder}/cases/cse.mlir"
+            "${workspaceFolder}/cases/tosa/ops.mlir",
+            // "-allow-unregistered-dialect"
         ],
     },
     // "mlir.server_path": "/home/cds/app/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04/bin/mlir-lsp-server",
@@ -16,5 +17,6 @@
         "*.inc": "cpp"
     },
     "[cmake]": {
-    }
+    },
+    "Codegeex.RepoIndex": true
 }

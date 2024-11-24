@@ -7,15 +7,23 @@
 
 namespace mlir::cdsdemo {
 
+// pass的函数定义
 #define GEN_PASS_DEF_CDSDEMOPASS
 #include "CdsDemo/CdsDemoPasses.h.inc"
 
 class CdsBasePass : public impl::CdsDemoPassBase<CdsBasePass> {
   using impl::CdsDemoPassBase<CdsBasePass>::CdsDemoPassBase;
   void runOnOperation() final {
-    llvm::errs() << "get name: " << "\n";
-    llvm::outs() << "----------> ConvertToyToArithPass run" << "\n";
-    llvm::outs() << "here is the pass of cdsbasepass" << "\n";
+    llvm::outs() << "pass name: " << getPassName() << "\n";
+
+    auto ops = getOperation();
+
+    ops->walk([](Operation *child) {
+      llvm::outs() << "\t type:" << child->getName()
+                   << "\t loc:" << child->getLoc() << "\n";
+    });
+
+    llvm::outs() << "====================================\n";
   }
 };
 } // namespace mlir::cdsdemo

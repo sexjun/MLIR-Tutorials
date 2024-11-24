@@ -7,7 +7,16 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_INSTALL_PREFIX "/usr/local/cds_bin")
 
-find_package(MLIR REQUIRED CONFIG)
+find_package(MLIR REQUIRED CONFIG PATHS "/usr/local/cds_bin/" NO_DEFAULT_PATH)
+message(STATUS "Using MLIRConfig.cmake in: ${MLIR_DIR}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+
+set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/bin)
+set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(MLIR_BINARY_DIR ${CMAKE_BINARY_DIR})
+
 list(APPEND CMAKE_MODULE_PATH "${MLIR_CMAKE_DIR}")
 list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
 
@@ -16,22 +25,13 @@ include(AddLLVM)
 include(AddMLIR)
 include(HandleLLVMOptions)
 
-include_directories(${LLVM_INCLUDE_DIRS} ${MLIR_INCLUDE_DIRS})
-
+include_directories(${LLVM_INCLUDE_DIRS})
+include_directories(${MLIR_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-# 设置生成的dialect的头文件路径
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
-
-
-add_executable(mlir-toy main.cpp)
-target_link_libraries(
-    mlir-toy
-    MLIRIR
-    MLIRParser
-    MLIRFuncDialect
-    MLIRArithDialect
-    )
+include_directories(${CMAKE_INSTALL_PREFIX}/include)
+link_directories(${LLVM_BUILD_LIBRARY_DIR})
+add_definitions(${LLVM_DEFINITIONS})
 
 
 add_subdirectory(include)
