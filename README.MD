@@ -1,5 +1,12 @@
 
+# MLIR-TutoRials
 
+MLIR的学习项目，通过该项目来了解MLIR的各个功能组件。
+
+- 文档
+    - [如何搭建MLIR项目的环境](https://github.com/sexjun/MLIR-Tutorials/blob/master/doc/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md)
+    - [MLIR的基本用法（了解即可）](https://github.com/sexjun/MLIR-Tutorials/blob/master/doc/MLIR%E7%9A%84%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95.md)
+    - [通过ODS创建pass](https://github.com/sexjun/MLIR-Tutorials/blob/master/doc/%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87td%E6%96%87%E4%BB%B6%E5%88%9B%E5%BB%BApass.md)
 
 
 
