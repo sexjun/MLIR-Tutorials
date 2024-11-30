@@ -301,6 +301,12 @@ int main(int argc, char **argv) {
 ```
 
 
+- 运行pass
+```shell
+(base) ➜  build git:(master) ✗ ./cds-opt --CdsDemoPass ../cases/tosa/ops.mlir
+running my mlir pass cds-demo
+pass name: CdsDemoPass
+```
 
 
 

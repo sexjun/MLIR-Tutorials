@@ -10,8 +10,15 @@ MLIR的学习项目，通过该项目来了解MLIR的各个功能组件。
 
 
 
+## Dialect结构
+![](https://global.discourse-cdn.com/flex015/uploads/llvm/original/2X/8/895708bb202e2a068e0c650272b84be34b1cb42b.jpeg)
+该图取自：[llvm 社区](https://discourse.llvm.org/t/rfc-updated-mlir-dialect-overview-diagram/64266)
+
+社区也有比较优秀的方言介绍文档： [Codegen Dialect Overview Codegen ](https://discourse.llvm.org/t/codegen-dialect-overview/2723)
 
 ## 7. pattern rewrite (toy-3)
+
+
 
 ODS有3种:
 

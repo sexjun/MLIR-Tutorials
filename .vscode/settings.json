@@ -18,5 +18,8 @@
     },
     "[cmake]": {
     },
-    "Codegeex.RepoIndex": true
+    "Codegeex.RepoIndex": true,
+    "markdown.copyFiles.destination": {
+        "**/*.md": ".assert/${documentDirName}/${fileName}"
+    }
 }
