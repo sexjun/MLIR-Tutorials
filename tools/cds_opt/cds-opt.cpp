@@ -20,7 +20,7 @@ using namespace llvm;
 #include "mlir/InitAllPasses.h"
 
 // 自己写的pass
-#include "CdsDemo/CdsDemoPasses.h"
+#include "CdsDemo/Transforms/CdsDemoPasses.h"
 
 #include "CdsDemo/Conversion/Patterns.h"
 

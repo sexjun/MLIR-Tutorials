@@ -194,11 +194,11 @@ namespace cdsdemo {
 
 // pass声明
 #define GEN_PASS_DECL
-#include "CdsDemo/CdsDemoPasses.h.inc"
+#include "CdsDemo/Transforms/CdsDemoPasses.h.inc"
 
 // pass注册函数
 #define GEN_PASS_REGISTRATION
-#include "CdsDemo/CdsDemoPasses.h.inc"
+#include "CdsDemo/Transforms/CdsDemoPasses.h.inc"
 
 // void cds_pass_register() { impl::registerMyOperationPass(); }
 } // namespace cdsdemo
@@ -210,7 +210,7 @@ namespace cdsdemo {
 1. 实现`CdsDemoPasses.cpp`文件
 
 ```C++
-#include "CdsDemo/CdsDemoPasses.h"
+#include "CdsDemo/Transforms/CdsDemoPasses.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/IR/PatternMatch.h"
 #include "mlir/Rewrite/FrozenRewritePatternSet.h"
@@ -221,7 +221,7 @@ namespace mlir::cdsdemo {
 
 // pass的函数定义
 #define GEN_PASS_DEF_CDSDEMOPASS
-#include "CdsDemo/CdsDemoPasses.h.inc"
+#include "CdsDemo/Transforms/CdsDemoPasses.h.inc"
 
 class CdsBasePass : public impl::CdsDemoPassBase<CdsBasePass> {
   using impl::CdsDemoPassBase<CdsBasePass>::CdsDemoPassBase;
@@ -278,7 +278,7 @@ using namespace llvm;
 #include "mlir/InitAllPasses.h"
 
 // 自己写的pass
-#include "CdsDemo/CdsDemoPasses.h"
+#include "CdsDemo/Transforms/CdsDemoPasses.h"
 
 int main(int argc, char **argv) {
   DialectRegistry registry;

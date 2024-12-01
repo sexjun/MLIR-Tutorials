@@ -10,11 +10,11 @@ namespace cdsdemo {
 
 // pass声明
 #define GEN_PASS_DECL
-#include "CdsDemo/CdsDemoPasses.h.inc"
+#include "CdsDemo/Transforms/CdsDemoPasses.h.inc"
 
 // pass注册函数
 #define GEN_PASS_REGISTRATION
-#include "CdsDemo/CdsDemoPasses.h.inc"
+#include "CdsDemo/Transforms/CdsDemoPasses.h.inc"
 
 // void cds_pass_register() { impl::registerMyOperationPass(); }
 } // namespace cdsdemo

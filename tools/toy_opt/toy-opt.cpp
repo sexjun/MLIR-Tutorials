@@ -17,7 +17,7 @@ using namespace llvm;
 #include "mlir/Dialect/Linalg/IR/Linalg.h"
 #include "mlir/Dialect/Linalg/TransformOps/DialectExtension.h"
 
-#include "CdsDemo/CdsDemoPasses.h"
+#include "CdsDemo/Transforms/CdsDemoPasses.h"
 
 int main(int argc, char ** argv) {
   DialectRegistry registry;

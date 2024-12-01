@@ -1,4 +1,4 @@
-#include "CdsDemo/CdsDemoPasses.h"
+#include "CdsDemo/Transforms/CdsDemoPasses.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/IR/PatternMatch.h"
 #include "mlir/Rewrite/FrozenRewritePatternSet.h"
@@ -9,7 +9,7 @@ namespace mlir::cdsdemo {
 
 // pass的函数定义
 #define GEN_PASS_DEF_CDSDEMOPASS
-#include "CdsDemo/CdsDemoPasses.h.inc"
+#include "CdsDemo/Transforms/CdsDemoPasses.h.inc"
 
 class CdsBasePass : public impl::CdsDemoPassBase<CdsBasePass> {
   using impl::CdsDemoPassBase<CdsBasePass>::CdsDemoPassBase;
