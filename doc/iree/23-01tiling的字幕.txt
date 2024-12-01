@@ -1,0 +1,2953 @@
+uh good morning good evening good
+
+afternoon everybody uh welcome to the uh
+
+January edition of the Year community
+
+meeting I I think we're waiting for Jack
+
+but I think we can get started uh so for
+
+people who don't know I'm Mahesh I work
+
+in the EU team in Google and uh today
+
+I'm going to talk about some of the work
+
+that uh we've been doing within our team
+
+with the contributions from Folks at
+
+Intel uh related to data typing in Erie
+
+I don't know
+
+so very basic what what is data timing
+
+uh as most people would probably know
+
+here it's a way to get your operands
+
+into a layout so that you can map a
+
+basic unit of work easily uh to Vector
+
+instructions uh without having to do
+
+complicated padding uh peeling or
+
+masking or things like that so uh to
+
+take an example if you're doing a
+
+quantized uh
+
+I8 I8 to get an i32 the the instructions
+
+on arm 64 devices that can allow you to
+
+do a left hand side of two cross eight
+
+right hand side of eight cross two uh to
+
+get the final output of 2 cross 2 uh
+
+Perma went over this a little bit in his
+
+talk previously in this forum uh and
+
+then you could pack many of these
+
+instructions into one unit of work so
+
+you could pack
+
+a few instructions as uh for the arm
+
+devices to get an eight cross eight left
+
+hand side a cross right hand side and
+
+that becomes your unit of work
+
+uh to make sure that for all problem
+
+sizes you can map your computation into
+
+this unit you would need to do some sort
+
+of padding so that you get your problem
+
+size to be a multiple of this unit
+
+um so that that would be enough with
+
+padding but uh what data layout gives
+
+you data layout Transformations give you
+
+on top of it is it makes sure that you
+
+keep your data access pattern contiguous
+
+for the operands uh even when you're
+
+executed across the different units of
+
+work so that puts you in a better
+
+position in space in terms of cash
+
+utilization because all the access are
+
+configured it removes a lot of
+
+complexity from the code that you would
+
+have to generate to handle uh
+
+multi-level caching or all of these
+
+things you might still need that to get
+
+like a last bit of performance but by
+
+default you're gonna put your hopefully
+
+in a better state
+
+um I think we've got an audio issue so
+
+can we interrupt it again sure we might
+
+not be restarting but I'm not sure if
+
+the users can hear us and I don't think
+
+we're hearing them
+
+oh I had the same issue in the morning
+
+uh yeah Jacques says they can hear us
+
+okay yes um but we cannot hear them I
+
+think we can hear them uh let's maybe
+
+try exiting here and then re-entering uh
+
+will that break the recording I know
+
+just check all of this will be recorded
+
+we can see people uh we we or Mike can
+
+you hear us uh we can hear you can you
+
+hear us okay it's fixed turn it off and
+
+on again
+
+so I don't know any questions before
+
+uh if they weren't I'll go ahead but if
+
+there are questions please feel free to
+
+to raise your hand we can take it as we
+
+go along
+
+um
+
+yes it was
+
+at a very basic level what data tiling
+
+for jamming from foreign boils down to
+
+this picture if you have one kernel that
+
+is doing a mammal
+
+uh with data tiling you would have four
+
+different colors uh again what each of
+
+those four are over the course of this
+
+this uh discussion you would pack the
+
+left hand side into a particular day out
+
+right inside into a particular layout
+
+then do uh the matmer computation in
+
+this example using the mt4d op uh which
+
+creates the output also in a pack layout
+
+and then you have the last Stitch pack
+
+that basic that gives you back the
+
+linearized output of the of of the of
+
+the mammal computation so if you take
+
+just a matter and you do and you try to
+
+do data telling with it that's what you
+
+would uh end up with so these are four
+
+different dispatchers which Loosely map
+
+to kernels
+
+um on Cuda basic execution uh unit in
+
+any terminology
+
+going a little bit more into details of
+
+what the pack and unpack operations are
+
+uh
+
+it takes just looking at the operation
+
+itself it takes a source which is a
+
+linearized tensor
+
+it takes a list of inner dims position
+
+naming his heart so the name is a little
+
+bit convoluted but uh
+
+what it is is giving you a list of
+
+dimensions of the linearized source that
+
+you want to tile so in this example the
+
+value is 0 and 1 which is saying that
+
+both the zero Dimension and one first
+
+dimension of the source needs to be data
+
+tiled
+
+uh the next is the tire sizes uh which
+
+is architecture dependent and they
+
+correspond to the tiles that you would
+
+use for each of the dimensions in the
+
+order that was specified in the inner
+
+dims position
+
+I'm not listed as clearly here but
+
+there's also an outer permutation that
+
+allows you to permute the uh uh the the
+
+dimensions of the path tensor
+
+on the outside so not the inner tiles
+
+Dimensions that you get but the outer
+
+Dimensions that are going over the tires
+
+so this is an explicit
+
+conversion of rank so now if in this
+
+example you start to do 2D tensor you
+
+end up with a 4D tensor uh
+
+so to make sure that your tensor is well
+
+formed you will need to do some padding
+
+in case the tire sizes don't divide this
+
+problem the size of the original Source
+
+tensor
+
+uh
+
+so the pack operation in general has uh
+
+padding semantics
+
+the the reverse operation which is the
+
+unpack looks very similar and just like
+
+and the reverse of the pack just like
+
+reverse of the pack your unpack has
+
+slight semantics so you get back the
+
+slice of the output that uh you would
+
+need to get back the organizer
+
+so in in specific case of the uh
+
+um
+
+uh in such I'm father we are currently
+
+looking at uh this would be the packing
+
+you would use for the left hand side and
+
+that would be the packing you would use
+
+the right hand side here the inner tile
+
+size is eight and four
+
+uh for both the left hand side right
+
+hand side but the thing that differs is
+
+on the right hand side you have the
+
+outer dips permutation being 1 0 which
+
+says that you're doing a transpose and
+
+outer dimensions and the inner dense
+
+version instead of being specified zero
+
+one is specified as one zero which means
+
+that your inner tile is also transposed
+
+so this gets your right hand side Matrix
+
+into a layout so that as you access the
+
+right hand side everything is contiguous
+
+and the same happens for the left hand
+
+side
+
+going to the computer operations you
+
+can't use a lineage much more directly
+
+because that works on 2D tensors you
+
+would need to use a different operation
+
+that can work do the same computation
+
+but now on a higher dimensional tensor
+
+so there is an operation which is the
+
+md4d operation that was added uh when we
+
+start looking into this path
+
+a long time ago so we can still use that
+
+operation it just represents a tiled
+
+mathematic multiplier execution
+
+recently Nicola landed a few patches
+
+that can take any lineage off and
+
+convert it into a higher dimensional
+
+linear generic opt which does the same
+
+computation but in a tiled fashion
+
+the advantage here is that
+
+[Music]
+
+um
+
+by construction the unit of work which
+
+is the inner tiles of this computation
+
+uh are vectorizable that's the reason
+
+why you the packing was done in the
+
+first place and you get better memory
+
+access pattern so the code generation
+
+for this to get reasonable performance
+
+should be face straight forward
+
+and this has been
+
+in before we started doing the data
+
+tiling work in in this context we
+
+already had a path to Target md40
+
+operations it was it just had a long
+
+layering So within that we'd already
+
+seen that it was able to get good
+
+performance matches the performance that
+
+was achieved through rui uh and in
+
+reality all the the the approach that is
+
+being taken here is derived from what
+
+rui used to use uh for Matrix multiply
+
+for context rui is a library that was
+
+developed by Benoit for Matrix multiply
+
+high performance Matrix multiply kernels
+
+on arm architectures
+
+okay so now with the data data tiling
+
+you get a
+
+your core compute operations are in uh
+
+fairly good shape but there's no free
+
+lunch the the thing that needs to be
+
+addressed here is the amortizing the
+
+costs of the packing and the unpacking
+
+in general there are two ways of doing
+
+it uh
+
+uh the first more local approach is to
+
+try to fuse the packing operations with
+
+the producer and conversely the
+
+unpacking with the consumer
+
+the way we try to get this
+
+working is both these operations
+
+implement the timing performance
+
+uh it's an interface for tiling that's
+
+been developed Upstream
+
+uh and the properties of that is once an
+
+operation implements that interface
+
+fusion with producers comes out of the
+
+box so it should be easy it by default
+
+handles Fusion of packing with its
+
+producers
+
+uh fusion with consumer is a little bit
+
+more involved but
+
+we have an implementation of it but it's
+
+not as straightforward as fusion with
+
+producer
+
+the other approach that you could use to
+
+amortize the cost of packing is by
+
+propagation so you can look at the
+
+source of the packing operation and then
+
+do a data layer transformation on the
+
+operands of the operation producing the
+
+source so in some sense you're moving
+
+the pack operation above the producer so
+
+that you are now packing the operands of
+
+the producer and you get the result in
+
+the layout that you want
+
+in general that's a harder problem uh
+
+it's not always clear that you can
+
+always propagate the pack across any
+
+producer uh and it's also issue of
+
+profitability uh the layout that you
+
+want the output in might not
+
+be something that you can
+
+use in a way they might not it might not
+
+match the layout that you would want for
+
+the producer operation
+
+uh sorry I can't see what Ben was
+
+written in the chat so I let people go
+
+uh also in Practical ml applications
+
+many map operands or compile time
+
+constants so packing of these can be
+
+those can be done by constant folding
+
+time to play with Stella's pass from
+
+December that's right I think that's one
+
+of the things that we need to resolve uh
+
+to to to land this part fully
+
+uh
+
+more broadly in a whole program context
+
+uh
+
+it's a it's a it's a harder problem to
+
+find ideal placement for these packing
+
+operations because you might have
+
+different operations that need different
+
+packing so it becomes a constraint
+
+solving problem which gets harder with
+
+arbitrary control flow so uh the easiest
+
+thing to do first is to try to adjust to
+
+the fuse fuse the packing with its
+
+producers and try to amortize the cost
+
+that way
+
+uh if that is not sufficient then we can
+
+try more complicated Solutions
+
+okay so this is just about packing and
+
+getting the uh the the the code
+
+generation what you need to do in the
+
+back in the code generation side of
+
+things to get uh the code that you want
+
+uh the next question was how do we
+
+support this in Erie
+
+before I go into details maybe just a
+
+bit of background on like overall flow
+
+of uh easy compilation uh with as
+
+required for for this for this
+
+discussion uh there's a flow dialect is
+
+where you identify uh Atomic units of
+
+work so you take your input program and
+
+you partition it into units of work that
+
+map to a dispatch region Loosely a
+
+kernel on Cuda not Loosely it's like it
+
+exactly maps to one kernel on if you're
+
+writing a Cuda if you're targeting coda
+
+um and this part is most is architecture
+
+agnostic so we don't know specifically
+
+what architecture targeting
+
+then uh the stream dialect is
+
+responsible for scheduling these
+
+dispatchers and the higher dialect is
+
+where you have the information about the
+
+architecture that you're generating the
+
+code for
+
+with it
+
+the when for the data typing approach
+
+you would have to move the packing and
+
+the unpacking operation into their own
+
+dispatches so that you can pre-process
+
+the data into the layout you want
+
+uh and because the pack and untrack need
+
+the inner tile sizes explicitly and
+
+that's not something that you have
+
+available at flow doing this in
+
+architecture agnostic way using the
+
+background pack uh was not feasible
+
+yes Nicola
+
+uh yeah I have a question on that last
+
+point because something seems a bit off
+
+to me so
+
+um
+
+let's see
+
+where do allocations happen
+
+um whatever is given to the hull level
+
+like somewhere it is you know the graph
+
+level bufferization at some point
+
+happens where does that happen
+
+that's in the Stream dialect
+
+I see
+
+um and the stream dialect doesn't know
+
+anything about the backend rate
+
+correct
+
+okay so I guess I'm seeing or it feels
+
+like uh something that that feels a bit
+
+fishy to me because uh
+
+if you're doing allocations in a Target
+
+independent way it means there must be
+
+some size that is good for everything is
+
+that true or not
+
+it there needs to be a size that is good
+
+for everything you're targeting and so
+
+where architecture agnostic but we're
+
+not necessarily informationless the goal
+
+here is to not necessarily be able to
+
+create a program that will run on any
+
+arbitrary thing but if the user says I
+
+want to run on these three different
+
+Shader Model architectures or these four
+
+different RM CPUs that we would pick
+
+between those as opposed to saying this
+
+one specific Hardware instantiation so
+
+we're architecture agnostic and we try
+
+to be General there so that we can do
+
+things like that as opposed to requiring
+
+entire copies of the program even if
+
+you're targeting you know
+
+a little in big cores on the same
+
+physical device correct
+
+okay and so so does that mean that we
+
+could technically use pack and pack Ops
+
+with those common tile sizes at that
+
+level is that accurate
+
+the the
+
+padding of the allocation is really the
+
+only thing that matters at this level
+
+not the actual dimensionality of of
+
+piles
+
+um because the only thing we care about
+
+on the outside is that we can call you
+
+know KU Mema Alec with the right bite
+
+size we never actually touched the
+
+contents all the contents and and how
+
+you actually process the data is done in
+
+the dispatches that are Hardware
+
+specific
+
+um and so one one of the assertions at
+
+this level if you're targeting multiple
+
+devices is you really just need to be
+
+able to allocate the right amount of
+
+memory
+
+um
+
+and the that padding that we choose to
+
+do on that memory allocation is
+
+something that can be queried all the
+
+way to runtime
+
+um
+
+we just don't know but then
+
+uh we can I have I had something later
+
+on that was specifically address towards
+
+this point so
+
+um
+
+oh sorry
+
+now go ahead and finish Nicholas
+
+someone else has a question on the chat
+
+I just wanted because I know that you
+
+can't see those yeah uh where does the
+
+progressive lowering occur like various
+
+generic optimizations on SCF standard
+
+affine are they even applied to stream
+
+dialect this is submarine Joshi
+
+so graph level Transformations I
+
+actually use graph programmable
+
+Transformations uh happen at the flow
+
+level uh and then when you have what you
+
+want to Target as a single kernel
+
+lowering that into the final scalar code
+
+happens within the higher dialogue in
+
+the packet so that's all the backends
+
+are basically nested within the hardware
+
+yeah conceptually at the flow level
+
+you're basically just saying I want to
+
+do you know these two units of work and
+
+here's the buffer that needs to exist
+
+between those
+
+um the stream dielect just make sure
+
+those buffers get allocated and then the
+
+Hal dialect is the thing with with the
+
+code gen on there that actually acts on
+
+those buffers
+
+um and so that that if if you were to
+
+draw this as a pyramid of kind of like
+
+deployment configurations that fan out
+
+the flow dialect we try to keep that as
+
+small as possible because any additional
+
+configuration we need to support there
+
+you know combinatorially explodes the
+
+whole problem whereas once you're at the
+
+Hal dialect if you want to multi-target
+
+multiversion
+
+um you know and specialize for different
+
+architectures you you can do that much
+
+more
+
+um effectively you know you you don't in
+
+a lot of cases with this tiling stuff
+
+need to specialize you know basic
+
+element wise operations and things like
+
+that for different architectures but you
+
+might decide for your comms and your map
+
+models to do that and this gives each
+
+one of those Target backends the ability
+
+to kind of make those decisions as it as
+
+it needs to based on what it's actually
+
+generating
+
+closure
+
+uh yeah so just looking at the last
+
+point there uh
+
+if the are the packing unpacks if
+
+they're not added to the flow or at the
+
+flow level where are they added and how
+
+can you form dispatch regions around
+
+them if that's stacked it in the next
+
+slide okay
+
+and I'll wait to the next slide
+
+okay so at the floor level what you'd
+
+what you only need is that you need to
+
+know that a particular tensor is going
+
+to be data typed you don't need to know
+
+the specific layout that you're going to
+
+use uh and you also potentially need a
+
+way to disambiguate between different
+
+layouts you want to use like the left
+
+hand side of Matrix multiply has a
+
+particular layout right side has a
+
+different layout you don't know the
+
+specifics of that layout but you just
+
+need to know that they're different
+
+so restating the problem it's you need a
+
+abstract representation of data layout
+
+at the flow level and that's enough for
+
+everything you need to do at that level
+
+so we decided to hook into the tensor
+
+encoding mechanism that exists and is
+
+being used by the sparse dialect work
+
+being done Upstream uh so
+
+for operations for tensor values that we
+
+know we want to change the layout we
+
+have uh set and set encoding operations
+
+that take a tensor value and just add an
+
+encoding to it it is a representation to
+
+say that e d by default treats tensors
+
+as raw major
+
+low raw major linearized the encoding
+
+tells you that the the actual tensor
+
+layout that you're using is different
+
+from the default
+
+uh
+
+so the way data tiling gets injected
+
+into the program is there's a pass today
+
+that goes and looks at each linear matte
+
+mold and adds these set and uncertain
+
+coding around its operands to to signify
+
+that the operands are being data typed
+
+and one one nice thing about this is
+
+this is the same thing we can use uh for
+
+a bunch of other techniques so sparsity
+
+is is the thing that kind of originated
+
+the tensor encodings that we're using
+
+here
+
+um because block sparsity is a type of
+
+data tiling and coding
+
+um and this kind of uses the same thing
+
+um other things we we can end up doing
+
+without our compression and then optimal
+
+image formats when we're targeting gpus
+
+that have support for that
+
+um you know what whether you are using a
+
+dxt compressed image or something is an
+
+encoding on a tensor that you would you
+
+would be able to encode in the same way
+
+people
+
+right so going back to this past dialect
+
+of that when Ben was talking about the
+
+the tensile encoding that they use in
+
+this fast type is pretty rich based on
+
+literature uh today we wanted to be as
+
+less opinionated as as possible so that
+
+we don't over design it so it's just an
+
+enum attribute that uh is a way to
+
+distinguish between the different levels
+
+that we are looking at as time
+
+progresses maybe we understand better
+
+what these encoding should be and make
+
+it make it richer but for now we're just
+
+starting with the most simple thing that
+
+you could do
+
+the good thing is that the encoding just
+
+propagates to the stream dialect it's
+
+basically a no up for the stream dialect
+
+and when you get into the higher dialect
+
+you can treat each of these encoding
+
+enorms and and convert them into the
+
+combination of the outer dense
+
+permutation the inner dims position the
+
+inner thigh sizes uh for each of the
+
+encoding uh based on the architecture
+
+that you're generating code for because
+
+at the high level you have all the
+
+details that you need to make this
+
+decision uh thing that I didn't mention
+
+earlier the inner tire size can also be
+
+dynamic this is actually not part of our
+
+initial exploration but we needed it for
+
+to land some of the pieces that we want
+
+to move under this framework so the
+
+inner tire size can be completely
+
+Dynamic and be runtime convertible and
+
+this being used
+
+this works well for computer operations
+
+as well so when you form the dispatch
+
+you would have a linear dot magma which
+
+with the operands having the encoding on
+
+them I just change the actual encoding
+
+to be more fit into the slides and then
+
+you can convert that in the ha into the
+
+lineage mt4d operation and use the stuff
+
+that Nicholas landed Upstream to convert
+
+any lineage up into the corresponding
+
+linear generic and from there everything
+
+is explicit you know the explicit tensor
+
+Dimensions explicit uh layout and then
+
+your code generation just has all the
+
+information that it needs and it sounds
+
+like this is um with Nicholas's changes
+
+which I've not reviewed uh this could
+
+potentially fold into apply to others
+
+yeah
+
+and just what you do for Mac why you
+
+look for any other
+
+vs use the md40 because it existed yes
+
+sorry I was going to mention there are
+
+limitations it's not like everything
+
+just magically uh works out of the box
+
+some of the limitations include
+
+basically it has to be some sort of
+
+permutation
+
+uh otherwise you need modulo and the
+
+operations so if you want to let's say
+
+data tile the image of a convolution for
+
+instance since it's accessed by a kernel
+
+you will need actually an operation that
+
+has Diva mod and lineage does not have
+
+that so on convolution you can only tile
+
+or data sorry the batch Channel filter
+
+Dimensions but not the other ones at
+
+least not within it's not closed under
+
+Linux let's put this way uh but I've
+
+been thinking about other type of
+
+structured Ops that could also work with
+
+that and but this would require
+
+extensions anyway so just just a word of
+
+caution is like it works for
+
+permutations that's about it and I think
+
+that makes that covers the last
+
+subset of things that you need like for
+
+convolutions I think that is what would
+
+be important
+
+okay so let's a little bit more on the
+
+pros and cons of using the encoding
+
+mechanism uh one is that the upside
+
+encoding allows you to not leak
+
+architecture details of the compilation
+
+stack
+
+there is we can
+
+try to structure the problem to get
+
+around that and we can discuss it later
+
+the actual the other benefit that by now
+
+we as obvious is that the rank and shape
+
+of the tensors don't change uh very
+
+early on in the program so if you try to
+
+do it at the flow level it means that
+
+you have to change the computation into
+
+something else because your explicit
+
+tensor layout has changed so if you had
+
+a lineage dot mat worked in your slope
+
+uh in your program at the very beginning
+
+you have to convert into something that
+
+is not that and having that semantic
+
+information is useful it's better to
+
+keep that later on in the pipeline to
+
+actually till you do the code generation
+
+so that's that's a big plus and like Ben
+
+mentioned it's similar to how past
+
+tenses are being handled uh pretty much
+
+the encoding views for the same same uh
+
+reason that you can keep a lineage.net
+
+mode operating on tensors or sparse type
+
+but your code computation hasn't changed
+
+and it's only when you start generating
+
+the code for it where things falling
+
+where the layout becomes important
+
+foreign
+
+optimization opportunities it could be
+
+that the two encodings that you use are
+
+the same in a particular backend and you
+
+don't have that information to fold it
+
+away at the flow level
+
+it could be that the encoding turns out
+
+to be a no op and in that case you don't
+
+know that at the flow level and you've
+
+already created those dispatches which
+
+end up being a copy so that's a little
+
+bit that's some inefficiencies that we
+
+still need to work out how to address
+
+that would only be the case if it was a
+
+dispatch that like a pack that could not
+
+be put with its producer if it was put
+
+with its producer yeah if you if you
+
+fuse the pack with the producer then if
+
+it's a no-off uh then it's a no help in
+
+the producer so then it just you
+
+basically don't see it but yeah yeah if
+
+your pack is in buying a dispatch by
+
+itself because it confused with anything
+
+then you might have some inefficiency so
+
+that's a good point
+
+propagation is also harder because you
+
+are working on abstract types so it
+
+makes it harder to reason about how you
+
+want to propagate it we haven't looked
+
+at propagation so we're not really
+
+thought a little deeply about how
+
+whether it actually works on it with
+
+encoding or not there might be a
+
+solution that works even on coding types
+
+just haven't considered it in a deep
+
+value
+
+so that's an overview of the data layout
+
+uh transformation work that's an easy uh
+
+the current state of it is we started
+
+with the armpath targeting mt4d as the
+
+first more on this because there was a
+
+lot of work done previously under the
+
+AMD 4D uh umbrella for targeting micro
+
+kernels generating efficient code
+
+uh inline assembly through the mt40 up
+
+and this allowed us to get all of those
+
+uh working without
+
+as well as address the the uh
+
+architecture detail leak that was
+
+happening at the flow level with the
+
+previous part
+
+so all of those things have now been
+
+moved under the data data layout change
+
+uh purview so it's all enabled under the
+
+same same work
+
+uh so far we only looked at within
+
+within era we only looked at uh the the
+
+Leonardo method operations
+
+and we made a specific choice to to say
+
+that we are going to have both the
+
+operands uh and the result being a tile
+
+layout
+
+uh that makes it simpler to write the
+
+micro kernels and also connects to md40
+
+uh
+
+so that was the decision made there the
+
+downside is that
+
+it does prevent Fusion of uh consumer
+
+operations with the linalda magma
+
+because now you have an unpack operation
+
+in the middle so you can fuse with the
+
+unpack and there's really no point
+
+fusing past that at least for now we may
+
+reconsider that later
+
+uh the upside though is one of the
+
+motivations we wanted to go down this uh
+
+try this approach was there isn't right
+
+now the way we can record for uh our
+
+models we effectively end up generating
+
+a unique dispatch for every MacBook code
+
+that we have in our computation so we
+
+have a huge binary size
+
+uh eventually we want to get to a place
+
+where in the limit we have a single
+
+kernel for all the magmas that you have
+
+in the model so that that can really
+
+reduce your binary size that has real
+
+effects on instruction cache usage uh
+
+and in that scenario fusing a magma with
+
+its produce with its consumer might not
+
+be something that you want to do so it
+
+depends on whether on trade-offs between
+
+binary size and performance and that's a
+
+study that needs to happen so for now we
+
+felt it is a reasonable path to go down
+
+so that that's was implemented today
+
+it's very easy to change it to not have
+
+the output being in a tile fashion in
+
+which case it would uh get you back to
+
+allowing fusing your your man was with a
+
+with a consumer which is like an element
+
+wise operation like we do today yeah we
+
+should that unpack should be really easy
+
+to move element wises across when we do
+
+this yeah that those are again
+
+propagations and haven't really looked
+
+into that part of things
+
+so given that we took a particular
+
+charge what are the other choices we
+
+could have taken here uh like I said the
+
+reason we went down this path was
+
+primarily to be able to get Target the
+
+same mt40 parts that exists today
+
+uh
+
+so I'm repeating myself here where you
+
+could uh not generate the output in a
+
+tile layout for your after data dialing
+
+so when you set the encoding you don't
+
+set an encoding for the result that will
+
+by the put you back on the path where
+
+you could fuse your maximum computation
+
+with the with the consumer and that
+
+works should work out of the box by just
+
+changing the encodings that you use
+
+it's also possible if you know that
+
+particular Hardware that you are
+
+targeting and you're interested only
+
+that particular Hardware you could use
+
+the pack and unpack operations and do it
+
+as a pre-processing step before uh what
+
+Ed does as compilation today
+
+uh so if you know exactly what you're
+
+targeting that's a thing that you could
+
+do and the pack and unpack are supported
+
+end-to-end like any other operation
+
+because it follows the same uh
+
+uh same part that edu uses for other
+
+operations today so that could be done
+
+as a pre-processing step if you're
+
+interested in a particular Target
+
+it's a matter of trade-off of what you
+
+want to focus on so if you're trying to
+
+achieve Peak Performance on a particular
+
+use case that's an option
+
+uh we haven't really built that option
+
+out but that is being that's one thing
+
+that we could do
+
+so far we've been looking at generalized
+
+performance out of the box on a wide
+
+range of Hardware so you might not be
+
+getting Peak on any particular Hardware
+
+but you're getting reasonable
+
+performance out of the box that's the
+
+goal so this is the path that we've
+
+taken so far and the understanding was
+
+that the data layout that we're using
+
+for the armpath is a reasonable data
+
+layout on on a wide range of Hardware
+
+including excelences so uh we need to
+
+actually work out the profiles and make
+
+sure that that's the case and see the
+
+trade-offs uh that's part of the work
+
+that we're going to do next
+
+uh we I haven't include any performance
+
+data in this talk because a lot of the
+
+performance data we have basically comes
+
+back to the mt4d performance
+
+uh so the next step in this work is to
+
+really look deep into profiles to see
+
+how how much we are amortizing the cost
+
+of the pack operations if you're not
+
+doing that
+
+uh what's the impact on producers when
+
+you fuse the pack with the producers and
+
+then try to mitigate those things that's
+
+the next steps
+
+uh as part of this work uh uh the micro
+
+kernels that were generated by that were
+
+written by Benoit that were used on the
+
+vmvx back-end we'd also like to start
+
+using them on this lvm CPU backend
+
+uh penma file an issue uh that describes
+
+why using micro kernels on x86 might be
+
+important as well for for getting good
+
+performance on x86
+
+so uh we have some Initial Ideas how we
+
+can we can do this but we haven't
+
+started work on that part yet
+
+uh there are few folks looking at data
+
+telling on the coda and Spirit backends
+
+uh that's yet to kick off though
+
+uh and then
+
+part of this work was done in
+
+collaboration with Intel uh I think some
+
+of them are in this call Lorenzo uh
+
+primarily contributed a lot of the code
+
+for the pack and unpack and I'm
+
+streaming it
+
+uh there's they have uh looked at using
+
+these operations to get good performance
+
+on convolution based modules uh and
+
+they've demonstrated that within the
+
+tppi for that they're driving
+
+so we'll probably go try to use a
+
+similar approach within Erie under this
+
+umbrella Nicola is doing some initial
+
+work in prototyping those those things
+
+and as we get more information we'll
+
+fold that into uh the EA compilation
+
+Flow by by default to to improve our
+
+convolution performance so those are the
+
+next steps
+
+and I think that's the end I don't know
+
+your questions from
+
+people on the call
+
+Grandpa
+
+um could you please go back to you know
+
+the uh let's see yeah exactly this one
+
+um
+
+how about let's see
+
+yes we mentioned you know the pre-pro
+
+sorry the pre-processing step and then
+
+architecture information how about using
+
+the
+
+um
+
+the fact that we can data tile by uh
+
+parameters basically by symbolic
+
+variables and then plug them later
+
+uh what do you think about that
+
+was one of the options but I think what
+
+it was like
+
+it would be really hard to manage where
+
+those symbols come from and where they
+
+get materialized and make sure that they
+
+get in a consistent manner across all
+
+the programs uh that's an option too I
+
+think we could keep that as a run time
+
+or a runtime constant which just gives
+
+you the value kind of what Ben was
+
+hinting for the padding as well yeah
+
+that's effectively what we would have to
+
+do because at the where we perform
+
+partitioning an actual placement of
+
+dispatches onto devices and deciding
+
+which dispatches are getting compiled
+
+for which architectures is in the Stream
+
+dialect and so if we were to have free
+
+floating Ops before that point it
+
+becomes much harder to place them
+
+because you know those might get hoisted
+
+out into globals done at initialization
+
+time or whatever but now you're you're
+
+kind of very far from where you actually
+
+need to be scheduling these things
+
+um and so having having something that
+
+is a unit that we can kind of move
+
+around uh together with the Ops that are
+
+actually consuming it just makes that a
+
+lot easier we can outline things we can
+
+you know inline functions we can kind of
+
+do all that stuff very freely
+
+part the answer to that Nicole I don't
+
+know if you agree with it or not uh it's
+
+easier to model things in types it gives
+
+you more guarantee than modeling and
+
+operations it seems like a similar
+
+trade-off here
+
+I mean so it's the same trade-off rate
+
+is uh SSA values versus attributes
+
+so I mean one of the downsides that you
+
+didn't mention is that
+
+um with the encoding stuff either we
+
+need to find a way to encode
+
+all the data tilings we might want in
+
+attributes or we start we're going to
+
+start having you know this enum actor is
+
+going to grow and it's going to be
+
+implementation specific one case at a
+
+time each time you want to add a new up
+
+each time you want to support a new app
+
+so
+
+the intent is that we use attribute
+
+interfaces there
+
+um and this is again like the concept of
+
+this being effectively like a library
+
+call for
+
+you know turn turn this data into some
+
+other form of data Shuffle the data
+
+permit the data something like that the
+
+thing that actually decides what the
+
+implementation of that Library call is
+
+is the attribute and today it's done as
+
+an enum and then it selects and just
+
+decides you know do do the library call
+
+for a left-hand side of a map mole
+
+operation
+
+um but that can be entirely pluggable
+
+and so it it then becomes a question of
+
+and this might be what you're getting at
+
+of is it possible to build a library
+
+call for the kind of transformation you
+
+want to do or are you generating
+
+something that inherently is not Library
+
+callable
+
+um and that that then may change things
+
+but if you can conceptually think of
+
+this like if you're writing a library
+
+and there was some pack function you
+
+wanted to call
+
+um what would be the name of that
+
+function
+
+that's really all that this is this is
+
+encoding I think you two are saying too
+
+something so you know you're saying that
+
+Nicholas is saying how do you um what if
+
+the function took a
+
+parameterized type you know uh what it
+
+what if it wasn't just an enum but it
+
+was symbolic in some way what would that
+
+be I don't know yeah that's the question
+
+yeah it should you know if we're if
+
+we're able to generate code
+
+um
+
+that uses this stuff effectively we do
+
+ostensibly need to be able to derive it
+
+and if it's based on the problem being
+
+performed that gets much harder because
+
+it's kind of like until we're actually
+
+executing the code we wouldn't know
+
+which path to do so I it's a good
+
+question if we can find examples of
+
+cases where I mean it might be like
+
+[Music]
+
+um
+
+blog
+
+block sparse Blah by symbolic sized
+
+something I mean I'm making I'm making
+
+stuff up because I don't know but but I
+
+mean the question of the types versus
+
+versus operands is exactly that or if
+
+you're if you're taking an attribute
+
+based approach do you know for certain
+
+that you never want to parameterize that
+
+um kind of also this also hints as these
+
+uh dependent types and uh this kind of
+
+I guess uh Magic uh trailing operands
+
+that we could add to any of like if you
+
+had a trading up operand interface or
+
+whatever that we could add to any lineal
+
+job then you could do whatever exactly
+
+the same thing that sorry that uh Eva is
+
+doing with the uh right with the buy
+
+whatever tied outputs right to pass the
+
+SSA values and you could actually encode
+
+a transformation there because you would
+
+have what you need and that would be the
+
+same thing as uh so instead of applying
+
+it you could actually
+
+um transport it and that would be rich
+
+and general in the sense that I don't
+
+need to write 20 different attributes
+
+and before that all instances of the
+
+usage of these attributes in the
+
+compiler agree I can just actually say
+
+apply this transformation and then it
+
+will apply it at some point like
+
+basically you register that you're going
+
+to apply the transformation
+
+and make it um I'm surprising I would
+
+say yeah you could imagine you know
+
+maybe it's a little bit of a stretch and
+
+find maps still scare me
+
+um but kind of like a fine apply
+
+um you know you have an attribute saying
+
+what you're doing and then you can have
+
+symbolic values that you capture along
+
+with it
+
+um here effectively we have the enums
+
+that we're using today are like aliases
+
+for some of my map
+
+um and these symbolic values are are
+
+implicitly defined in the in the back
+
+ends as they can query tile sizes and
+
+stuff like that but we could make those
+
+explicit as well
+
+um it would just be the the selection of
+
+what's near the front of the pipeline
+
+you choose to make symbolic
+
+um you know if it's based on the program
+
+or a user tuning value or something like
+
+that that's one thing if it's based on
+
+the hardware architecture then that's
+
+something that that kind of gets harder
+
+to query at that level
+
+I'll tell tell you all the management
+
+trick is to watch other people's faces
+
+when someone is speaking and and want
+
+know what expression they have that
+
+means that you just added nine months of
+
+work to my plate
+
+what spine Maps they're easy right
+
+actually I mean it's interesting enough
+
+because I think one of the earlier
+
+proposals from uh Lorenzo was for the
+
+pack operation to use a fine method to
+
+define the pack I think that's what they
+
+started with in their development but
+
+when when they started moving it
+
+Upstream staging it immediate and moving
+
+Upstream we kind of like a finance is
+
+too heavyweight to describe that let's
+
+go with like something that is very
+
+simple to describe because that's what
+
+you need but maybe I find maps are the
+
+final solution I would be a fine maps
+
+with the generalization that being some
+
+mechanism to capture the symbolic values
+
+for them on that set encoding
+
+don't really oh yeah uh or at least
+
+knowing you can elaborate to that it's
+
+you just need to know so here for
+
+example you with the assumption is that
+
+your right hand side needs the same
+
+kind of a fine Maps but the value of
+
+what you use for the Thai size is
+
+different and that is architecture to
+
+connect so the offline map itself might
+
+be okay across architecture if you want
+
+to be that specific for an architecture
+
+that is kind of outside well you might I
+
+we're out on a webinar on how General do
+
+you want this to be but if you wanted to
+
+to be that you would you would still
+
+have the placeholders are are known to
+
+be runtime to find symbols some of them
+
+I can imagine in a fully generic setup
+
+are SSA captured in some way you know
+
+it's I know we can still have the
+
+implicit ones that are hard to model
+
+atomically at this level
+
+um
+
+um I I don't know what level of
+
+generality you're after but it seems
+
+like that's that's the access and what's
+
+nice is this setting coding and unset
+
+encoding are just kind of the front end
+
+Ops
+
+um once it gets into pack and unpack and
+
+the back ends it's kind of fully
+
+explicit and so I think what's nice is
+
+if we decide to completely change how we
+
+reason about these things at the flow
+
+level and as we're doing this
+
+um shouldn't really change the rest of
+
+the system so I think there's there's
+
+room for iteration here there's room for
+
+alternates yeah yeah I think that's
+
+that's why I say the backing on fact are
+
+like supported operations on the front
+
+end so you could have back operation and
+
+as that evolves if that satisfies the
+
+generality we could use that as a
+
+funding uh this is just like one way to
+
+kind of
+
+low low overhead way to do it without
+
+having to re-injuring the whole system
+
+when you wanted to change direction
+
+because we've got the medium zero days
+
+since we've been independent times
+
+um because yeah the the other thing here
+
+that that will eventually get to you
+
+know people ask about heterogeneous
+
+compute and stuff like that
+
+um when we start Crossing devices that
+
+might have different parameters for
+
+these things that's where we need to add
+
+a higher level be able to reason about
+
+you know we we told it to pack into this
+
+form on this device and then we're
+
+consuming it on this other device
+
+um we need to reconcile those and
+
+um how how we do that will be
+
+interesting it's done in lots of domains
+
+um you end up with non-optimal but you
+
+know still somewhat optimal forms as
+
+intermediaries between devices and
+
+things like that and those are the kind
+
+of things that would be much harder to
+
+do if we had already baked it out into a
+
+particular form ahead of time we we
+
+can't decide to move some work to a GPU
+
+and some work to a CPU or a DSP versus
+
+versus the main General compute
+
+um
+
+we'll we'll get there when we get there
+
+but the the idea at least anyway is that
+
+starting at this point gives us that
+
+flexibility to explore that space where
+
+if we were to hard code it we would
+
+never be able to get there
+
+see this discussion reminds me of of
+
+Jeff's late night proposal from pldi
+
+that he pinned up that you know uh upset
+
+everybody so like it's always fun to
+
+dependent science fiction but as I say
+
+kojo has had his hand up for a bit
+
+uh yeah thanks um I was fine with the
+
+discussion uh continuing I just uh had a
+
+thought on the like trying to connect
+
+this to what this looks like on the
+
+ground so you mentioned like Kudos
+
+future work
+
+um can you speak a little bit about what
+
+the pack and unpack Ops would look like
+
+say on the Cuda back end particularly as
+
+you emphasize like the key here is
+
+really how these are fused with their
+
+producers and consumers or you're
+
+amortizing the costs that actually gets
+
+you to speed up
+
+okay
+
+uh
+
+I'm not sure I know how to do what uh
+
+the question is because it basically is
+
+let me go back to the backup there's no
+
+much different
+
+here it is on yeah the difference would
+
+be that the values you use for the outer
+
+Dems foundation and all the different
+
+things listed here so at the level in
+
+the Cuda back-end what the specific
+
+values of those things are are depend
+
+are picked in the
+
+in the Cuda backend to say these are the
+
+values I want today we picked something
+
+that works for arm actually it's
+
+structure so that there's a forearm we
+
+picked this and Ben wanted some work to
+
+pick a different set for x86 but
+
+those shouldn't matter uh so much in
+
+terms of fusing with the producers
+
+because you are never going to all those
+
+are doing is
+
+changing what the inner tile size is
+
+uh
+
+uh you're only going to be fusing along
+
+the outer Dimensions you don't want to
+
+go and fuse with the innermost tiles of
+
+these computations because they map to
+
+something that is a unit of work on your
+
+Hardware so you're expecting them to
+
+happen and like
+
+sort of an atomic step where you just
+
+perform those computations and then what
+
+these the result of those computations
+
+how they get used is kind of how what
+
+the fusion and all those things are so
+
+uh it should not be very different the
+
+kind of things that you would have to do
+
+to generate code on CPU would be similar
+
+to to what you would have to do on the
+
+GPU except you have another degree of
+
+parallelism that you need to account
+
+first and concretely like these these
+
+Ops you know they they're not magic like
+
+the the outer dims for example might
+
+change the stride that you're using to
+
+walk the the right hand side if you're
+
+transposing and then the inner dims
+
+might introduce or or remove the need
+
+for a shuffle or permute operation
+
+um but that's that's kind of it at the
+
+end of the day the expectation anyway is
+
+that that is all this ends up being
+
+foreign
+
+will lead newer encodings or the current
+
+encodings can be used uh
+
+I think the current encoding can be used
+
+we might have to just not use the output
+
+encoding if you really want to keep the
+
+fusion but I
+
+uh if there are encodings are like there
+
+are any it's just the algorithmic
+
+specific performance optimizations or
+
+there to the encoding there is also some
+
+architecture stuff uh dude there is some
+
+architecture specific stuff to encoding
+
+there is architecture specific stuff in
+
+the sense that for the particular
+
+operation you want to know what the tile
+
+size is and that may depend on for say
+
+Matrix multiplied depends on the tensor
+
+core sizes so the actual value of these
+
+might be different based on the
+
+architecture you're doing
+
+uh but broadly the
+
+the
+
+also these enums you could interpret
+
+them how you want on so you don't need a
+
+different set of encodings it's a matter
+
+of how you interpret the encodings on
+
+different brackets
+
+oh my God right hand side of a matrix
+
+multiply has some layout
+
+what that layout actually is is
+
+completely up to the Cuda Market to
+
+decide you don't need to add a new
+
+encoding for the right hand side of a
+
+matrix multiply it's the same encoding
+
+it's just you interpret it differently
+
+on the Cuda side and since all the
+
+dispatch is interpreted the same way you
+
+it's consistent across the program
+
+okay
+
+so encoding as an enum and based on the
+
+architecture so if I Define it like uh
+
+the encoding is defining a layout where
+
+layout is a mapping from a coordinate
+
+space to an index space and then that
+
+mapping is a some function so math
+
+function and based on the enum and enum
+
+you will apply a math function that is
+
+mapping the coordinate space to the
+
+index space and now on using the same
+
+enum you can apply a different function
+
+yes yep if I understand that
+
+correctly I that's right
+
+that's exactly what we do on x86 and on
+
+arm and some preliminary work that I saw
+
+Kure was doing on good aside it's just
+
+how you interpret it is different
+
+thanks
+
+yes
+
+uh I don't know if this is related but
+
+one thing I've noticed uh looking at
+
+various models
+
+um usually preceding a map mole will
+
+usually have some sort of a transpose
+
+I'm guessing to get one of the I think
+
+the the right hand side in a format so
+
+it would be contiguous for the map mode
+
+and this is this is pretty common I'm
+
+curious if this would address that like
+
+because we've talked about you know
+
+efforts diffuse that into the mountain
+
+could aside and then you know so we
+
+don't have separate dispatches before
+
+every map mole that's essentially
+
+rearranging the right hand side right so
+
+I think there are two things here one
+
+maybe that is a little bit of a
+
+premature optimization being done where
+
+the transpose is being introduced by the
+
+front end where it's making a decision
+
+on how this manual has to be executed on
+
+the device so there's a little bit of
+
+that leak happening if you do
+
+so if you didn't have that transpose you
+
+could do you could basically the over
+
+the packing of the right hand side does
+
+is the transverse it's transposing it so
+
+that you get continuous access so you
+
+could use that to fold it away
+
+uh but that gets opinionated because
+
+you have to then
+
+know that folding it is harder the way
+
+you're using the encoding because you
+
+would have to fold it at the flow level
+
+and that's an abstract so in here you
+
+don't have that information to me having
+
+the transpose if if there's a way you
+
+could avoid having that transpose coming
+
+in from the input and instead just leave
+
+it as a math mode
+
+or some other operation and use the data
+
+padding
+
+uh the the backing I'm packing to get
+
+the layout you want and that's a
+
+decision made in the back end that
+
+layers better so there might be a couple
+
+of things going on I think I think
+
+you're going to run into the run into
+
+the case that there will be transposes
+
+or not and there are effectively anyways
+
+in the in the program and you want to
+
+you want to fold them fold them in and
+
+then there's going to be an optimization
+
+pass somewhere that decides
+
+yeah but then that the folding those
+
+transverses in means that you have some
+
+information about what the layout that
+
+you're using in the packet is going to
+
+be otherwise I don't see how you could
+
+or you can always refold them
+
+um like you know yeah look at how xley
+
+does this for example it can it can add
+
+a it can fuse a transpose with just
+
+about any app because they are
+
+effectively noise in the program yeah
+
+and you you have to use that so
+
+yeah with this folding be done at
+
+because like we've talked about this in
+
+terms of folding at the back end level
+
+with the knowledge on psychuda like we
+
+can do a map mole with an implicit
+
+transpose on the outper ends I I don't
+
+know what that looks like at the flow
+
+level though because that there's not
+
+really anything to represent that
+
+yeah those kind of things get tricky
+
+because there's capabilities that you
+
+have but then there's there's reasons
+
+why you wouldn't would not use them so
+
+it is never going to be efficient to not
+
+transpose the right hand side even if
+
+the hardware might let you do that by
+
+like providing automatic striding of
+
+memory loads
+
+um because you're you're going to be
+
+making a lot more memory transactions
+
+and that's often a limited resource but
+
+if you otherwise would have had to do a
+
+dedicated dispatch and a full read and
+
+write through memory in order to get it
+
+transposed they can be better but this
+
+becomes like a pretty complex cost
+
+modeling thing
+
+um so yeah it it gets very hairy at that
+
+point where you're you're talking about
+
+these kind of data layout changes
+
+um I don't I don't think we're there yet
+
+you know like likely all of this stuff
+
+will come from annotations done by you
+
+know profile guided optimization and
+
+stuff to start before before we get to
+
+the point where we're automatically
+
+doing that humans are really bad at this
+
+today
+
+um as well
+
+you can look at the specific case that
+
+you have and walk through it and see
+
+what's happening
+
+foreign
+
+so I'll jump in here I guess um you may
+
+be interested to take a quick look at
+
+the uh draft PR that I sent uh the
+
+reason is so considering we can do code
+
+gen wherever so purely uh in the
+
+pre-processing type of thinking
+
+that PR what it does is it uses actually
+
+uh
+
+data data tiling or back and pack as a
+
+way to normalize any contraction
+
+meaning that whatever the flavor of
+
+matmo with or without transposes once
+
+they're folded meaning that whatever
+
+order of ijk
+
+and
+
+um
+
+transpositions of the operands you give
+
+it it will normalize to always the same
+
+matmul on this thing and adapt attack
+
+unpack accordingly
+
+so that's I guess part of the
+
+generalization I was talking about
+
+because like with one thing
+
+you can handle all contractions like all
+
+of them 3D 4D 5D whatever and then same
+
+thing for convolutions with one thing we
+
+should be able to handle all
+
+convolutions and that that's something
+
+that um
+
+it's pretty powerful so
+
+we can discuss it next time
+
+and why do you want to just read out
+
+what you for some chat
+
+you're muted
+
+yeah uh sorry I was just saying uh the
+
+root cause why transporting right hand
+
+side is so generally useful uh Beyond
+
+any specific Hardware consideration like
+
+cash and striding is down to math uh
+
+Matrix modification is not commutative a
+
+times B and B times a are totally
+
+unrelated in general but
+
+a times transpose B is almost the same
+
+thing as B times transpose a namely it's
+
+the transpose a times transpose B is the
+
+transpose of B times transpose a in what
+
+I wrote in the chat I had b in a slot
+
+so that math fact that Matrix times
+
+transpose of Matrix is much closer to
+
+being commutative than just Matrix times
+
+Matrix if the root cause y it's so
+
+useful at so many levels of Downstream
+
+from that abstract meta level to
+
+transpose RGS
+
+that's a good point maybe that's why we
+
+see so many times
+
+I'm sorry I didn't hear oh maybe that's
+
+why the Transporters are coming from in
+
+in the models
+
+yeah
+
+well I mean they're really
+
+they're really coming on because people
+
+have a much more they just know about
+
+matmo right so then you need to
+
+transpose B in order to get the
+
+commutative property or close to
+
+commutative property but if you have an
+
+Einstein op you don't really care it's a
+
+math model or a whatever like the op
+
+semantics can change and give you the
+
+transports for free
+
+it also gets interesting with gradients
+
+you know but anyway uh so I think we're
+
+running a little bit out of time today
+
+you know thanks for the great
+
+presentation uh so you know if folks
+
+have more questions just please follow
+
+up you know online in in the chat room
+
+or email
+
+um and we'll send out a recording soon
+
+um and please remember to fill in the
+
+form for topics of Interest
+
+thanks very much everybody
+
+

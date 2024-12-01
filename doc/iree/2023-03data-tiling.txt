@@ -1,0 +1,2408 @@
+foreign
+外国
+
+oh I'm getting an echo from oh there we
+哦，我得到了回音哦，我们
+
+go okay
+开始吧
+
+um so uh today we have Benoit uh
+嗯嗯所以嗯今天我们有 Benoit 嗯
+
+presenting on
+介绍
+
+um kind of uh counterbalancing goals um
+嗯嗯平衡目标嗯
+
+in terms of Peak Performance versus
+在峰值性能与
+
+um generalizability in uh data titling
+嗯嗯数据通用性方面
+
+Matt Mullen CPU as a case study so I
+以 Matt Mullen CPU 为案例研究 所以我
+
+will turn it over to Benoit
+将把它交给 Benoit
+
+[Music]
+[音乐]
+
+it's you does your laptop
+你的笔记本电脑
+
+um logged in as a meeting participant
+
+instead of just presenting yeah
+是否以会议参与者的身份登录，而不仅仅是演示，是的
+
+[Music]
+[音乐]
+
+we know it's still happening even though
+我们知道它仍在发生，即使
+
+your laptop is out now
+你的笔记本电脑现在已经不在了，
+
+um
+嗯，
+
+maybe try uh try ending the call and
+也许可以尝试呃尝试结束 呼叫并
+
+logging back in it was me but basically
+重新登录是我，但基本上
+
+I used this feature from inside Google
+我使用谷歌文档中的这个功能
+
+docs to shall I tab
+来标记我应该选择，
+
+and that was my mistake ah
+这是我的错误，
+
+um because even though it didn't show me
+因为即使它没有显示
+
+a mute microphone icon it was actually
+静音麦克风图标，它实际上
+
+defaulting with to have the microphone
+默认使用 打开麦克风，
+
+on
+
+so let me join in the normal way
+让我以正常方式加入，
+
+this is better yes that's much better
+这样更好，是的，这样好多了，
+
+thank you okay
+谢谢，好的，
+
+take two turning it over to Benoit
+再来一次，交给 Benoit，
+
+all right
+好的，
+
+um thank you everyone so I would like to
+嗯，谢谢大家，所以我想
+
+know should I aim for like this ending
+知道我是否应该瞄准这样的结局
+
+in about 30 minutes by default or do we
+默认大约 30 分钟，还是我们
+
+want to take the full hour
+想花整整一个小时，
+
+um I think we have a few other things
+嗯，我想我们还有其他一些事情，
+
+that are just uh relatively quick
+只是呃相对快速的
+
+discussions um so if you've if you've
+讨论，所以如果你
+
+got content for the full hour
+有整整一个小时的内容，
+
+um or maybe let's say 45 minutes
+或者也许让我们 说 45 分钟，
+
+um no no
+嗯，不，
+
+it's fine but also I think we can have
+没关系，但我认为我们可以进行
+
+some general discussion
+一些一般性讨论，
+
+um no kind of up to you yeah okay I will
+嗯，不由你决定，是的，好的，我会
+
+try to finish a bit quicker
+尽量快点结束，
+
+um so
+嗯，
+
+that's a general theme here uh that I
+这是一个一般性主题，我
+
+was uh suggesting to Jack might be
+建议杰克 也许
+
+useful to spend some discussion on
+花点时间讨论一下这个问题会很有用，
+
+that's like how do we make a a project
+比如我们如何让
+
+like this tractable
+这样的项目变得易于处理，
+
+what kind of write-off do we make with
+我们需要在性能上做出什么样的抵消
+
+performance to get tractability and and
+才能获得易处理性，而且
+
+like there's a thought that these are
+有一种想法认为这些
+
+not like four of our trade-offs and we
+不像我们的四个权衡 我们
+
+are just like reshuffling the the deck
+就像重新洗牌，
+
+we've been handled the clouds have been
+我们已经处理好了云层，
+
+handed to so that the tractable things
+以便处理好的事情，
+
+come first one like forever foregoing
+就像永远放弃
+
+performance but like in the short time
+表现，但在短时间内，
+
+we're still making hard choices
+我们仍然在做出艰难的选择
+
+and like I'm anchoring this discussion
+，就像我 这次讨论的主题
+
+on what I'm currently doing on data
+是 我目前正在进行数据
+
+training math mode
+训练数学模式，
+
+um I don't like
+嗯，我不喜欢
+
+I I
+我，
+
+I need that in order to get this
+我需要这样做才能
+
+concrete and to have something specific
+具体化，并有一些具体的东西
+
+to say that doesn't that doesn't mean
+要说，这并不意味着
+
+that that's the single most important
+这是最重要的
+
+thing in the world is trust whatever
+事情 世界就是信任
+
+I've been promptly working on and what's
+我一直在迅速研究的以及我
+
+currently on my mind
+目前在想什么
+
+um so I I started this slide deck uh
+嗯所以我开始这个幻灯片呃
+
+with a few slides on matrix
+用矩阵乘法的几张幻灯片，
+
+multiplication so that I don't assume
+这样我就不会假设
+
+prior knowledge of this
+事先知道这个
+
+um it's okay if this sounds like too
+嗯如果这听起来像
+
+much detail and you mentally conclude I
+细节太多，你就会得出这样的结论：我
+
+just like skim through the slides uh
+只是浏览了一下幻灯片，嗯，这就是
+
+that's that's the point there's no need
+重点，没有必要
+
+to get into details but does a general
+深入细节，但可以概括出一个大概的
+
+thing that emerges from this hopefully
+内容，希望
+
+so on this side you have like a simple
+你在这方面有一个简单的
+
+information in in C of matrix
+信息在 C 中
+
+multiplication on Raw major 2D matrices
+在原始主要二维矩阵上进行矩阵乘法
+
+that's just to set the landscape to so
+只是为了设置景观，这样
+
+everyone uh knows what we're talking
+每个人都知道我们在说什么，
+
+about
+
+um
+嗯
+
+and so that's just a loopness with three
+，这只是一个带有三个
+
+nested Loops so you're going to have M
+嵌套循环的循环，所以你将有 M
+
+times n times K iterations overall
+次 n 次 K 次迭代 总的来说，
+
+sometimes we simplify this by assuming
+有时我们会通过假设
+
+those three sizes are the same so we say
+这三种尺寸相同来简化这一点，所以我们说
+
+that n cube iterations with us and Cube
+n 次立方体迭代，我们和立方体
+
+amount of work here being done on three
+的工作量在这里是在三个床垫上进行的，
+
+mattresses electrics are addressing out
+电气设备正在解决这些问题，它们
+
+that are still uh each of them n Square
+仍然是呃，每个都是 n 平方
+
+data
+数据，
+
+so that more arithmic work than data
+以便更多 算术工作比数据更重要，
+
+this is arithmetically intensive
+这是算术密集型的，
+
+um so obviously you want to use the
+嗯，所以很明显你想使用
+
+position menu to use your targets Vector
+位置菜单来使用你的目标
+
+features simd features to run this fast
+向量特征 simd 特征来快速运行，
+
+then that means you have to unroll those
+那么这意味着你必须
+
+Loops by some compiling constant amounts
+通过一些编译常数来展开这些循环，
+
+which we call respectively and zero and
+我们分别称之为零 并且
+
+k0 not going to depend on your CMD Isa
+k0 不会依赖于你的 CMD Isa，
+
+and here's just a few examples
+这里只是几个例子，
+
+um
+嗯
+
+and what's really hard here is you
+，这里真正困难的是，你
+
+really want this to run at Peak and this
+真的希望它在峰值时运行，这
+
+is one of these few cases where Peak is
+是峰值
+
+actually Within Reach irresistible
+实际上在触手可及的少数情况之一，不可抗拒，
+
+um it's one of the few instances of
+嗯，这是其中之一 在少数
+
+application where when Intel says my my
+应用中，当英特尔说我的
+
+Hardware does one terafrops it actually
+硬件可以达到每秒 1 万亿次时，它实际上
+
+does with the right code
+使用正确的代码就可以做到，
+
+um so that's a very very strong sense of
+所以这让人非常强烈地感觉到
+
+like how fast these things go
+这些东西的速度有多快，
+
+um but that also means that it's such a
+但这也意味着它是如此
+
+high about your code needs to be
+你的代码需要
+
+spending all of its time saturating all
+花费大量的时间来饱和所有
+
+of the arithmetic pipelines and that
+的算术管道，这
+
+means you have very little wiggle room
+意味着你几乎没有回旋余地
+
+to do all the other work you have to do
+去做其他你必须做的工作
+
+to eat those arithmic pie candles
+来吃掉那些算术派蜡烛
+
+um
+，
+
+so I'm using a color code here I'm I
+所以我用了一个 这里的颜色代码我
+
+I always highlight it's like
+总是强调它就像
+
+instructional selection things
+指令选择的东西
+
+arithmetic work and now in red what's
+算术工作，现在是红色的
+
+about memory accesses
+内存访问，
+
+so what makes Matrix modification extra
+所以使矩阵修改更加
+
+hard is if we look at this naive metamor
+困难的是如果我们看看
+
+on Raw major mattresses look at just the
+原始主要床垫上的这个天真的元异形，只看
+
+left hand side accesses rhs stands for
+左侧 访问 rhs 代表
+
+left hand side
+左侧
+
+um is accessing
+um 是
+
+m0 data streams concurrently and by data
+同时访问 m0 个数据流，
+
+streams I mean like streams of
+我所说的数据流是指
+
+contiguous bytes for memory
+内存中连续字节的流，
+
+we've unrolled the loop on M by a factor
+我们在 M 上通过一个称为 m0 的因子展开了循环，
+
+called m0 and so now like we're we're
+所以现在我们
+
+reading at each group iteration from m0
+每次组迭代时从 m0
+
+non-contiguous addresses
+非连续地址读取，
+
+okay and so we may be touching m0 cache
+所以我们可能会接触 m0 缓存
+
+lines and remember from the previous
+行，记得前面的
+
+example m0 might be something like 8 or
+例子中 m0 可能是 8 或
+
+16.
+16。
+
+so if we are over the cache the L1 cache
+所以 如果我们超出了缓存 L1 缓存
+
+associativity then we are bound to run
+关联性，那么我们肯定会
+
+into trouble although that may not be
+遇到麻烦，尽管这可能不会
+
+immediately apparent if you are lucky
+立即显现出来，如果你
+
+with the stride values and if we want a
+对步幅值很幸运，并且我们希望
+
+matter to perform consistently well of
+问题始终表现良好，
+
+course all the problem sizes then we are
+当然所有问题的大小都是如此
+
+running into trouble already here now if
+现在我们已经遇到麻烦了，如果
+
+you look at the right hand side for this
+你看一下这个
+
+promise or matmo it looks a little
+承诺或 matmo 的右侧，它看起来有点
+
+different because now each Loop
+不同，因为现在每个循环
+
+iteration accesses The n0 Continuous
+迭代都会访问 n0 个连续
+
+element so that's fine but the next Loop
+元素，所以这很好，但下一个循环
+
+iteration jumps by n and so for large
+迭代会跳转 n，因此
+
+problem size that means that it's
+问题规模很大，这意味着
+
+impossible for the CPU to create fetch
+CPU 不可能
+
+more than a few new iterations into the
+在 N1 缓存中创建提取超过几个新迭代的程序
+
+N1 cache
+
+[Music]
+[音乐]
+
+uh and if even larger scale memory
+呃，如果更大规模的内存
+
+behavior of of this look Nest is even
+行为看起来 Nest 甚至
+
+harder because we have any work on x
+更难，因为我们有任何关于 x 的工作
+
+square data so each byte is accessed n
+平方数据，因此每个字节被访问 n
+
+times
+次，
+
+um and there's no way to reorder these
+并且没有办法重新排序这些
+
+Loops to about redundant accesses that
+循环，以进行冗余访问，
+
+are going to be some buffer accessed in
+
+a very relevant way no matter how we
+无论我们如何排序，这些访问都将以非常相关的方式访问一些缓冲区，
+
+order this and so that's why people
+这就是为什么人们
+
+working on Matrix mutation keep talking
+致力于矩阵突变 继续
+
+about data cache L1 and 12 and cash it's
+讨论数据缓存 L1 和 12 和现金它是
+
+it's it's it's a it's a problem in
+它是它是它是一个它是一个
+
+general
+一般的问题，
+
+like when you've been assigned welcome
+就像当你被分配欢迎
+
+Math More you've been assigned an
+数学更多你被分配了一个
+
+intractable problem at least until you
+棘手的问题至少直到你
+
+find a way to make it trackable but then
+找到一种方法使它可追踪但然后
+
+you're you're going to have to make some
+你 必须做出一些
+
+trade-offs
+权衡，
+
+yeah again the color coding is blue is
+是的，颜色编码是蓝色，
+
+for like instruction selection kind of
+代表指令选择，
+
+things like Cogen kind of thing Cindy
+比如 Cogen 之类的东西，Cindy 的
+
+things and red is memory performance
+东西，红色代表内存性能
+
+and you can see that even in the in
+，你可以看到，即使
+
+terms of choosing your unrolling amounts
+在选择展开方面 数量
+
+and 0 and 0 k0 I've highlighted in bold
+和 0 和 0 k0 我已经用粗体突出显示了，
+
+uh some of these calls for higher values
+其中一些要求更高的值，
+
+and some others call for lower values so
+而另一些则要求更低的值，因此，
+
+if you're trying to solve for all these
+如果您试图解决所有这些
+
+things that once is going to be messy
+问题，那么一旦变得混乱，
+
+foreign
+
+so how do we make this tractable so how
+那么如何 我们让这个问题变得容易解决，那么
+
+do we
+我们如何
+
+find a path where we don't have to solve
+找到一条路径，让我们不必
+
+for all these variables at once with
+一次性解决所有这些变量，而且
+
+conflicting goals
+目标相互冲突，
+
+so we do that basically by accepting
+所以我们基本上接受
+
+that at least in the near term we're not
+至少在短期内我们不会
+
+going to have a team or performance
+有 团队或表现，
+
+so some of the things that we thought we
+所以有些事情我们认为我们
+
+actually have to do well maybe we can we
+实际上必须 我们可以，
+
+can uh we can order these things so that
+呃，我们可以将这些事情排序，这样
+
+the really hard problem come last
+真正困难的问题就排在最后，
+
+um and so the approach that I've been
+所以我一直在
+
+pursuing to this which is nothing new we
+追求的方法并不是什么新鲜事，我们
+
+call it data timing in the context of
+称之为编译器上下文中的数据时序，
+
+the compiler but people are much more
+但是 人们更多地
+
+dating back to the go to paper 15 years
+追溯到 15 年前的报纸上，他们
+
+ago have been calling that attacking
+一直在呼吁攻击
+
+it's nothing new it's standard practice
+它并不是什么新鲜事，它是
+
+in this business it consists in
+这个行业的标准做法，它包括
+
+in
+
+relay outing the mattresses by
+
+some tires based on type layout so that
+根据类型布局用一些轮胎接力运送床垫，以便
+
+the innermost Loop of the mat model
+最内层的循环 mat 模型
+
+performs trivial memory accesses only
+执行简单的内存访问，
+
+contiguous data is read for on the NHS
+在 NHS 上只读取连续的数据，在
+
+and another continuous data stream for
+
+rhs and that's it and no no internal
+rhs 上读取另一个连续的数据流，就是这样，不需要内部
+
+switching is needed to feed into this in
+切换来输入
+
+the instructions the data is already in
+指令中的数据已经在
+
+memory in the crack layout that makes it
+内存中的裂缝布局中 使其
+
+really easy to load into CD registers
+非常容易加载到 CD 寄存器中，
+
+so that's what we call data timing and
+这就是我们所说的数据时序，
+
+it does mean that the innermost Loop uh
+它确实意味着最内层的循环呃
+
+coaching problem is free of memory
+指导问题不受内存
+
+access considerations because like even
+访问考虑，因为
+
+if I told you your online cache size has
+即使我告诉你你的在线缓存大小有
+
+this properties this size you can't use
+这个属性，这个大小你 无法使用
+
+this information your enormous group is
+这些信息，你的庞大群体是
+
+it has got to travel this data anyway
+无论如何都要传输这些数据，
+
+and the accesses are already previewed
+并且访问已经是连续预览的，
+
+continuous
+
+so you can't do better than that
+所以你不能做得更好，
+
+even that does not make inner loop Cogen
+即使这样也不一定能使内循环 Cogen 变得
+
+necessarily tractable
+易于处理，
+
+if it removes specific ways in which it
+如果它删除了它可交互的特定方式，
+
+was interactable it lends you in a spot
+它会将你置于一个位置
+
+where it may be attractive or may not be
+可能很有吸引力，也可能没有吸引力，这
+
+depending on your specific performance
+取决于你的具体性能
+
+goals and set of products so that's why
+目标和产品组合，所以这就是为什么
+
+we have a second tactic to to further
+我们有第二种策略来进一步
+
+cement detractability here and that's
+巩固可减损性，这就是
+
+what we call microcontroller and
+我们所说的微控制器，
+
+microcontroller just says
+微控制器只是说，
+
+um
+嗯，
+
+I just provisioned for being able to
+我只是为能够抛出而做好准备
+
+throw in my own implementation
+在我自己实现中，
+
+handwritten uh code for this uh enormous
+为这个庞大的群体手写了代码，
+
+group so even if it's hard to to to to
+所以即使很难
+
+to teach the compiler to generate this
+教会编译器生成这个
+
+enormous proof then I have this easy
+庞大的证明，那么我也有这个简单的
+
+Escape Route
+逃生路线，
+
+um we're prospering both
+我们正在繁荣
+
+microcontrollers and glocogen
+微控制器和 glocogen
+
+non-micochon rules in parallel
+非 micochon 规则 同时
+
+pragmatically choosing between the two
+务实地在两者之间做出选择，
+
+so
+所以
+
+the the
+
+basically you again this is only zooming
+基本上你再次只是放大
+
+in into my own work where I'm focusing
+我自己的工作，我专注
+
+on data typing I'm not claiming this is
+于数据类型，我并不是说这是
+
+a universal approach uh to make more or
+一种通用的方法，呃，可以做出更多或
+
+even within Erie but that's just the the
+甚至在 Erie 内部，但这只是
+
+focus of this talk so for me choosing
+本次演讲的重点，所以对我来说，
+
+early to do data timing unlocks a layout
+尽早选择进行数据计时可以解锁一种布局
+
+approach were an earlier approach where
+方法，这是一种早期的方法，
+
+I can start from the inner layers and
+我可以从内层开始，然后
+
+work my way out
+逐步扩展
+
+um to what the the outer layers and at
+到外层和 在
+
+each layer
+每一层
+
+I only have a few variables to solve for
+我只需要求解几个变量，
+
+and I only solve for those variables and
+而且我只求解这些变量，
+
+when I move to the next layer I never
+当我移动到下一层时，我永远不需要
+
+have to solve again for those already
+再次求解那些已经
+
+solved virus I only incrementally so for
+求解的病毒，我只需要逐步求解
+
+a few isolated variables at each layer
+每一层的几个孤立变量
+
+so we are going to go through this uh
+所以我们现在要讨论一下这个
+
+layout now
+布局，
+
+so the zeroth layer is decide to the
+所以第零层决定
+
+data type that's a compromise in itself
+数据类型，这本身就是一种折衷，
+
+data telling means re-layout in the
+数据告诉意味着在矩阵中重新布局
+
+matrices and that means literally main
+，这意味着字面上的主
+
+copy style operations buffer to buffer
+复制样式操作缓冲区到缓冲区
+
+memory to memory uh you you're spending
+内存到内存呃 你花了
+
+some time if before you can even get to
+一些时间，如果在你
+
+start doing Matrix modification work now
+开始做矩阵修改工作之前，
+
+you'll have to spend some time
+你必须花一些时间
+
+performing buffer copies uh which are
+执行缓冲区复制，这
+
+actually significantly less efficient
+实际上
+
+than mem copy because of the change of
+比内存复制效率低得多，因为
+
+data layout so that doesn't sound like a
+数据布局发生了变化，所以 听起来不是个
+
+great way to uh to to it doesn't sound
+好办法，呃，听起来
+
+like we've made progress at this point
+我们没有取得进展 这一点上，
+
+we've just added more work to be done so
+我们只是增加了更多的工作要做，所以
+
+that's a trade-off but trading away
+这是一个权衡，但
+
+problems for tractability
+用问题换取
+
+the impractibility uh we get from
+可处理性，我们从
+
+enabling the whole layout approach and
+启用整个布局方法中获得的不切实际性，
+
+in more immediate terms
+更直接地说，
+
+uh this is what enables the inner loop
+这就是使内循环
+
+question to deal with only trivial
+问题 只处理简单的
+
+memory accesses uh so that separates the
+内存访问，这样就将
+
+vector gen blue uh effect from the
+向量生成蓝色效果与
+
+memory accesses red aspect
+内存访问红色方面区分开来，
+
+and well the the cost the overhead we're
+我们
+
+introducing here is not that bad
+在这里引入的成本开销并不是那么糟糕，这
+
+depending on what you call that it's in
+取决于你怎么称呼它，它在
+
+the five to twenty percent range even
+五到二十 百分比范围甚至
+
+good enough uh
+足够好了，
+
+um which you know it's it's something
+嗯，你知道这是有点什么，
+
+but if it enables the whole thing to be
+但如果它能让整个事情变得
+
+trackable then I'm willing to pay the
+可追踪，那么我愿意付出
+
+price because in the end I'd be happy to
+代价，因为最终我很高兴
+
+have Eerie matlos consistently go at 70
+Eerie matlos 能持续以 70
+
+percent of peak and this kind of
+% 的速度运行 峰值，这种
+
+overhead does not preclude in that and
+开销并不排除，
+
+later it may also actually evaporate
+后来它实际上也可能消失，
+
+it's possible for packing and unpacking
+打包和拆包
+
+operations to get fused into producers
+操作可以融合到生产者
+
+and consumers in a way that they never
+和消费者中，这样他们
+
+actually have to be run it as their own
+实际上就不需要将其作为自己的
+
+discrete operations
+离散操作来运行
+
+um
+
+um so moving up to the next level so at
+嗯嗯 太感动了 达到下一个级别，所以在
+
+this point we've decided to do data
+这一点上，我们决定进行数据
+
+training we are not uh again uh having
+训练，我们不必再
+
+to worry about that one it's already a
+担心这个问题，它已经是
+
+maximum at this point so now at this
+最大值了，所以现在在这个
+
+level okay we know we are going to do
+级别，我们知道我们要进行
+
+data setting we must choose MCO and zero
+数据训练 设置我们必须选择 MCO 和零
+
+Casio actually you always vectorize with
+Casio 实际上你总是用
+
+some specific and running amounts but
+一些特定的和运行的量进行矢量化，但
+
+with a data typing approach this is more
+使用数据类型方法这更为
+
+crucial because now this is going to
+关键，因为现在这将
+
+dictate your memory layouts
+决定你的内存布局
+
+um so here we introduce a further uh
+嗯所以在这里我们引入了进一步的
+
+trade-off we're going to say m0 n0 k0
+权衡我们 现在要说的是 m0 n0 k0
+
+for now are always going to be part of
+总是会成为两个的一部分，
+
+two
+
+that is a trade of of additional
+这是额外性能的权衡，
+
+performance because that's some uh cases
+因为在某些情况下，
+
+where actual Optimal Performance is
+实际的最佳性能是
+
+achieved by a number of two values
+通过两个值来实现的，
+
+but
+但
+
+sticking to product to here means
+坚持产品到这里意味着
+
+there's so few choices that just read at
+选择太少了，只要读一下
+
+the ISA specification tells you what
+ISA 规范就知道
+
+values you should be using
+你应该使用什么值，
+
+basically look at the simple instruction
+基本上看看
+
+on your camera should be busy running in
+相机上的简单指令应该忙着
+
+a loop and say okay how many of those
+循环运行，然后说
+
+can I put side by side even how many
+我可以并排放置多少个，甚至如何
+
+registers I have and well if you add the
+我有很多寄存器，如果你加上
+
+requirement that you must have powers of
+你必须拥有的要求
+
+two then that basically Narrows down to
+那么基本上就缩小到
+
+one possibility
+一种可能性，
+
+we can always generate later to
+我们以后总是可以生成
+
+non-perous too just from now this is uh
+非可重复的，只是从现在开始，这是
+
+a good compromise
+一个很好的妥协，
+
+and and so yeah the what we get in
+所以是的，我们得到的
+
+exchange for that is canonicality of a
+交换是单一选择的规范性，
+
+single choice so we don't spend more
+所以我们 不要再
+
+time hesitating and
+犹豫了，
+
+as someone who's been like maintaining a
+作为一个在法国维护
+
+uh like stacks of neural networking
+神经网络堆栈
+
+France for a few years I can tell you in
+几年的人，我可以告诉你，在
+
+the past when we had like tidal values
+过去，当我们的潮汐
+
+of like 12 we had people doing neural
+值为 12 时，我们有人在做神经
+
+network architectural stuff saying let's
+网络架构的东西 说让我们
+
+let's like make the Next Generation
+
+neural network super fast by empirically
+通过实证
+
+measuring what works best oh like
+测量什么最有效来让下一代神经网络变得超级快，比如
+
+multiples of 12 World crates let's let's
+12 个世界板条箱的倍数，让我们
+
+design the entire tissue around that and
+围绕它设计整个组织，
+
+then you know that that scared me so
+然后你知道这让我非常害怕，
+
+much I thought I'm never going to do a
+我想我永远不会去 做一个
+
+non-prof2 camera game
+非prof2相机游戏
+
+um
+嗯
+
+so next level so at this point we have
+所以下一个级别所以在这一点上我们
+
+selected the m0 and the old case they're
+选择了m0和旧的情况它们
+
+all tile size values we know the data
+都是图块大小值我们知道数据
+
+layouts they are set in stone uh the
+布局它们是固定的呃我们
+
+next problem we solve at this level is
+在此解决的下一个问题 水平是
+
+generate the code for the enormous group
+产生 对于庞大的群体，
+
+we have a fixed reference C
+我们有一个固定的参考 C
+
+implementation of that the only question
+实现，唯一的问题是，
+
+is what should be the same D
+
+implementation of that for our Target
+对于我们的目标，D 实现应该是什么，
+
+and nv0n0k0 have been selected to be
+并且 nv0n0k0 已被选为
+
+optimally friendly to our targets so
+对我们的目标最友好的，所以
+
+it's really a matter of
+这实际上是一个
+
+use their rights in the instructions
+使用它们的问题 说明中的权利
+
+um
+嗯，
+
+it's really easy because data setting
+这真的很容易，因为数据设置
+
+means that there's only one data stream
+意味着只有一个数据流
+
+being accessed and its contiguous for
+被访问，并且它对于
+
+each of left-hand side and right hand
+左侧和
+
+side data so you can focus purely on the
+右侧数据都是连续的，因此您可以纯粹专注于
+
+arithmic performance and your memory
+算术性能，并且您的内存
+
+accesses are triggered you have to make
+访问被触发 你必须
+
+those memory accesses in any way of
+以任何方式访问这些内存，否则
+
+nothing can do about it
+
+now even with that syndicogen is always
+现在就无能为力了，即使有了 syndicogen 也总是
+
+hard
+很难，
+
+um it's hot partly because well
+嗯，它很热，部分原因是
+
+silicogen is hard in general and partly
+硅基通常很难，部分
+
+because especially on x86 due to
+原因是特别是在 x86 上，由于
+
+awareness of this MD Isa your
+意识到这个 MD Isa 你的
+
+accumulator layout may be difficult uh
+累加器 布局可能很难
+
+uh maybe non-trivial and you have
+呃呃可能不平凡，你有
+
+variables for being able to have
+变量可以有
+
+nonsense accumulator layout and differ
+无意义的累加器布局，并且不同于
+
+from Sweden to the end and the beginning
+瑞典到内循环的结束和开始
+
+of the inner loop and that means it's
+，这意味着
+
+best to trade the whole loop as a whole
+最好交易 整个循环作为一个整体，
+
+and so you would make that tractable by
+所以你可以
+
+having the option of having micro
+选择使用微型
+
+Commons we don't have to do everything
+Commons，这样就更容易处理了。我们不必
+
+with Michael Collins but when it gets
+和 Michael Collins 一起做所有事情，但当它
+
+hot in some specific case we can always
+在某些特定情况下变得很热时，我们总是可以
+
+uh short circuit this complexity with
+用微型循环来缩短这种复杂性
+
+microcurl
+
+and even with microcontrollers it can
+即使使用微控制器，情况也会
+
+get really hard because if you look at
+变得非常困难，因为如果你观察一下
+
+excellent impact which is a state of the
+极佳的影响，也就是地球的状态，
+
+Earth for like
+比如
+
+um hand tune assembly for 20 different
+手动调整组装 20 种不同的
+
+variants of uh on micro architectures
+微架构变体，
+
+um it's really hard to get picked on all
+那么在所有微架构上挑选真的很难
+
+micro architectures
+
+um but if you are okay to focus on some
+但是如果你可以专注于
+
+recent my organizations and maybe not
+最近的一些组织，也许
+
+necessarily aim for a hundred percent of
+不一定以百分之百的峰值为目标，
+
+peak then you ultimately all your
+那么你最终所有的
+
+intrinsics actually can be
+内在因素实际上可以
+
+um simpler and you need fewer variants
+更简单，你需要更少的变体，
+
+I didn't write anything for this slide
+我没有为这张幻灯片写任何东西，
+
+because you know this is just like a
+因为你 知道这就像
+
+couple of four loops around the enormous
+围绕巨大循环的四个循环，
+
+Loop uh not much to say here the reason
+呃，这里没什么好说的，之所以说它有点
+
+why it's kind of trivial is that the
+微不足道，是因为
+
+layer above that
+
+level four which we are getting to next
+我们接下来要讲的第四层之上的层
+
+has its job to select small enough High
+有其工作，即选择足够小的高
+
+sizes that this working set sort of
+尺寸 这个工作集
+
+it's in a little one or some more
+一个小的或者更
+
+General uh version of that but basically
+通用的版本，但基本上
+
+it's small enough that the um
+它足够小，以至于
+
+memory accesses uh don't need to be
+内存访问不需要很
+
+smart
+智能，
+
+so next level select the dispatch tile
+所以下一级选择调度图块
+
+service and that's that's the right
+服务，这就是
+
+place to talk about cpu's data cache at
+讨论 CPU 数据缓存的正确地方
+
+least L1 and L2 at this level so good
+在这个级别至少是 L1 和 L2，所以
+
+thing that we've already we've already
+好事是我们已经
+
+finished we're already done talking
+完成了，我们已经讨论完了
+
+about about what the title should be
+标题应该是什么，
+
+we're already done about finding out
+我们已经找出了
+
+what the code will be in our in our
+代码在我们的
+
+loops we can now solve uh for uh these
+循环我们现在可以解决呃这些
+
+type sizes with other input uh the L1
+类型的大小与其他输入呃L1
+
+and two cache sizes uh without having to
+和两个缓存大小呃而不必
+
+Simply solve for Cogen problems
+简单地解决Cogen问题
+
+and finally you know you you have your
+最后你知道你有
+
+your dispatches you've decomplete your
+你的调度你已经将你的
+
+MacBook into a bunch of dispatches which
+MacBook分解成一堆
+
+are each like Computing is on title of
+每个调度都像计算一样，是
+
+the overall problem the question is how
+总体问题的标题，问题是如何以
+
+do you iterate of those in a way that is
+
+you know memory local that's why you
+内存本地的方式迭代它们，这就是为什么你
+
+talk about the entry cache which which
+谈论入口缓存，这
+
+is typically shallow among parents and
+在父母中通常是浅薄的，
+
+yeah that's if you're going to
+是的，如果 你要将
+
+distribute that work to multiple trials
+这项工作分发给 多次试验，
+
+that's also why you talk about that and
+这也是你谈论这个的原因，
+
+so good thing that we're already done
+所以
+
+with all the inner layouts before we get
+在我们进行
+
+to
+
+um multi-trading and and to share cash
+多重交易和分享现金之前，我们已经完成了所有的内部布局，
+
+and well that's all I had I'm so sorry
+这就是我所拥有的一切，我很抱歉
+
+about the long monologue uh um I don't
+长篇独白呃嗯我
+
+have anything else I hope that you have
+没有其他问题了我希望你有
+
+questions
+问题
+
+thanks very much yeah
+非常感谢是
+
+yeah I have a question about uh number
+的我有一个关于呃
+
+four number five
+第四个问题第五个
+
+um I think I get a bit confused because
+嗯我想我有点困惑因为
+
+we use the term dispatch to refer to
+我们用调度这个词来指代
+
+um
+嗯
+
+threat the amount of work that each
+威胁每个
+
+thread is going to do but here you're
+线程将要执行的工作量，但这里你
+
+talking about caches at least in level
+至少在第四级谈论的是缓存，
+
+four so
+所以
+
+yeah can you clarify a bit uh the
+是的，你能澄清一下吗，
+
+difference between
+
+uh telling for crashes and threading
+呃，崩溃和线程之间的区别，
+
+uh yes
+呃，是的，
+
+um I I may have missed you the world
+嗯，我可能错过了你
+
+dispatch what I meant was by Dispatch
+我在这里所说的“调度”
+
+here I meant a call to the dispatch
+是指对调度
+
+solution
+解决方案的调用，
+
+so every compile generates functions
+因此每次编译都会生成
+
+called dispatch something
+名为“调度”的函数，这些函数
+
+and they are called in some sequence or
+会按一定顺序被调用，或者
+
+the calls to this discussions are
+对这些讨论的调用会
+
+distributed to different threads and
+分布到不同的线程中，
+
+that's what I was calling a dispatcher
+这就是我所说的 调度员
+
+okay that makes sense
+好的，这很有道理，
+
+thanks
+谢谢，
+
+and into the the other part of your
+然后进入另一部分 你的
+
+question uh it's kind of intentional
+问题是，
+
+that the multitrading aspect is mixed
+多交易方面
+
+with the large-scale cache L3 aspect
+与大规模缓存 L3 方面混合在一起是故意的，
+
+because well
+因为
+
+that the question of how you trade about
+你如何交易
+
+those how you move from one type to the
+这些问题，如何从一种类型转移到
+
+next has to factors simultaneously those
+另一种类型，必须同时考虑这些
+
+aspects in my experiments like as much
+方面。 实验就像
+
+as I am a fan of separation of concerns
+我在这里关注点分离的粉丝一样，
+
+here I I like they I have not been able
+我喜欢他们，但我
+
+to disentangle these two ethics
+无法解开这两个道德问题，
+
+okay yeah that makes sense
+好的，是的，这很有意义，我
+
+there are questions for Benoit
+对 Benoit 有一些问题，
+
+I can ask more questions but prefer to
+我可以问更多问题，但更愿意
+
+wait please do
+等待，请
+
+so yeah you're thinking about
+这样做，是的 你在考虑
+
+um
+嗯
+
+you know micro kernels versus code
+你知道微内核与代码
+
+generation thinking in a uh
+生成思维，
+
+F32 mad mode for example so if if we
+例如在 F32 疯狂模式下，所以如果我们
+
+apply
+应用
+
+um
+嗯
+
+data tiling
+数据平铺
+
+and
+
+and all the steps that you have before
+和你在生成微内核之前的所有步骤，
+
+generating the micro kernel I was
+我
+
+wondering how different the
+想知道嗯有什么不同
+
+um
+
+the instruction level is going to be if
+指令级别将是如果
+
+you compare you know you do all the
+你比较你知道你做所有的
+
+blocking the same way all the dining the
+阻塞都是以同样的方式进行的，所有的用餐都是以
+
+same way
+同样的方式进行的，
+
+and you compare the code that you
+你比较你
+
+generate with the micro kernel and the
+用微内核生成的代码和
+
+code that we generate with code gen
+我们用代码生成生成的代码，
+
+um
+嗯有
+
+how much is the the difference what what
+多少 有什么不同吗？
+
+do you what have you seen there
+你在那里看到了什么？
+
+yeah
+嗯，
+
+um this
+
+um basically
+基本上是这个
+
+once you're right what could be a
+一旦你确定了什么才是适合
+
+reasonable microcontroller for your
+你的目标的合理微控制器，
+
+Target it becomes quite obvious whether
+那么无论
+
+you're in a case where could you could
+你处于哪种情况下，都可以
+
+do just fine
+做得很好，
+
+or well there's a specific difficulty
+或者 kujan 必须克服特定的困难才能
+
+that kujan would have to overcome
+
+the cases that work just fine are
+很好地工作
+
+first the accumulator tile I must must
+首先是累加器块，我必须
+
+have a trivial layout
+有一个简单的布局，
+
+um
+嗯，
+
+what I found in x86 for example were
+我在 x86 中发现的例如，
+
+um Cindy squizzles are only cheap if
+嗯，Cindy squizzles 只有
+
+they are within 128 blocks was that in
+在 128 个块内才很便宜，
+
+order to avoid expensive schedules I had
+为了避免昂贵的调度，我
+
+to be smart with the accumulator layout
+必须聪明地使用累加器布局
+
+then I thought oh wow that is not going
+然后我想，哇哦，这
+
+to be nice at all for Cogen because now
+对 Cogen 来说一点也不好，因为现在
+
+it's no longer like a nice detector
+它不再像一个很好的检测器，
+
+um that abstracts the equilateral title
+可以抽象等边标题，
+
+um the other thing that can be hard for
+嗯，另一件对
+
+uh code Channel but not impossible is uh
+代码通道来说很难但并非不可能的事情是，嗯，
+
+look by planning optimizations so
+看看 规划优化通常可以
+
+often uh one achieves a substantial
+
+amount of extra performance by enrolling
+通过增加
+
+the inner loop by 2X and reordering
+2 倍的内循环以及对
+
+loads and stores around the arithmetic
+算术中的加载和存储进行重新排序来实现大量的额外性能，
+
+sorry lows around the arithmetic uh to
+对不起，算术中的低点 为了
+
+maximize load to use distance this is
+最大限度地利用负载以使用距离，这
+
+feasible in Cogen but not trivial so
+在 Cogen 中是可行的，但并非微不足道，所以
+
+it's a pragmatic
+这是一个务实的
+
+a Time Consciousness trade-off
+时间意识权衡
+
+um
+嗯
+
+and the other thing
+，另一件事
+
+is because you you specifically scope
+是因为你专门
+
+your question with float32 but I was
+用 float32 来限定你的问题范围，但我想说
+
+going to say
+
+um
+嗯
+
+float32 here is fairly easy for Cogen
+float32 在这里是相当 对于 Cogen 来说很容易，
+
+because on prompt CPU targets flute 32
+因为在提示 CPU 目标上，长笛 32 的
+
+in price you are doing an auto product
+价格你正在做一个自动产品
+
+kernel
+内核
+
+um
+嗯
+
+in eight Podium current targets is
+在八个 Podium 当前目标
+
+basically not another product owner
+基本上不是另一个产品所有者
+
+there's some inner reduction Dimension
+有一些内部减少维度，
+
+that is uh hard for the compiler to
+这对于编译器来说很难
+
+Target the current MLA vectoral Rings
+针对当前的 MLA 矢量环
+
+don't do that well
+做得不好，
+
+um
+嗯，
+
+and
+
+the upcoming Isa extensions uh bring
+即将到来的 Isa 扩展
+
+that aspect also to F32 but like to the
+也将这方面带到了 F32，但就像
+
+extent that we are doing out of front
+我们在前端内核中所做的那样，
+
+kernels which is the case currently with
+目前 F32 就是这种情况，
+
+F32 then yeah the it's not too difficult
+那么是的，一般来说这并不太难
+
+in general to to coach
+教练，
+
+yeah that's why I mentioned uh F series
+是的，这就是为什么我在这里提到 F 系列，
+
+here because you know for example if you
+因为你知道，例如，如果你
+
+want to use uh bnni that's something
+想使用 bnni，那么
+
+that would be much more difficult for
+
+encroaching right so that means more
+侵犯权利就会困难得多，所以这
+
+like an instruction instruction
+更像是一个指令 指令
+
+scheduling kind of thing you can be much
+调度之类的东西，你可以
+
+more precise about how did you uh
+更精确地说明你是如何
+
+organize instructions
+组织
+
+uh for the innermost Loop so yeah okay
+最内层循环的指令的，所以是的，好的，
+
+that makes sense yeah
+这很有意义，是
+
+yeah
+的，
+
+actually it's not even just vnni that
+实际上，不仅仅是 vnni
+
+makes it hard for coach and
+让教练和
+
+um the data layout uh it's actually the
+数据布局变得困难，这是 实际上，
+
+same organism Vienna and ion Intel
+维也纳和离子英特尔是同一个有机体，
+
+because in that hot dog product
+因为在那个热狗产品
+
+instructions before again and I don't
+说明之前，我不
+
+like Vienna and I brings both 8-bit and
+喜欢维也纳，我带来了 8 位和
+
+16 values the ab challenge is unusable
+16 位值，ab 挑战无法使用，
+
+uh and the 16-bit variant is basically
+呃，16 位变体基本上
+
+like the existing instruction plus the
+就像 现有指令加上
+
+multiply accumulate aspect so it's a
+乘法累加方面，所以这
+
+kind of minor uh change for us actually
+对我们来说是一种很小的变化，实际上
+
+it actually makes uh nearly 2x uh speed
+它实际上使速度提高了近 2 倍，
+
+up which is nice but the code is almost
+这很好，但代码几乎
+
+the same and even without being an eye
+相同，即使没有眼睛，
+
+we already have like 3D Dot products
+我们已经有了像 3D Dot 产品
+
+with uh with that requires like short
+嗯，这需要像短
+
+photos to Target efficiently that are
+照片一样有效地定位，而这
+
+not uh easy for the for Cogen to get
+对于 Cogen 来说并不容易，
+
+right
+
+and on top of all of that there is a
+最重要的是，
+
+generic problem with coaching for matrix
+矩阵乘法核的指导存在一个普遍的问题，
+
+multiplication kernels which is
+这有
+
+um two reasons uh that we agree that
+两个原因 嗯，我们同意，
+
+um maculars generally need to be as wide
+嗯，黄斑通常需要
+
+as possible uh given the number of
+尽可能宽，嗯，考虑到
+
+cylinder registers in the architecture
+架构中的气缸寄存器数量，
+
+that means that they tend to be close to
+这意味着它们往往接近
+
+maximum or digital pressure
+最大或数字压力，
+
+um and that means they are generally
+嗯，这意味着它们通常是
+
+fairly hard or historical equation
+相当硬或历史方程
+
+problems for the compiler and so it's
+编译器的问题，所以
+
+very frequent to follow that cliff and
+经常会出现这种悬崖现象，
+
+you know have performance diminished by
+你知道性能会降低
+
+another many because the compiler didn't
+很多，因为编译器没有
+
+find the right register location
+找到正确的寄存器位置，
+
+all right
+好吧，
+
+this is very incidental um that's why we
+这是偶然的，这就是为什么我们
+
+are pragmatically in some cases uh I'm
+在某些情况下务实
+
+and actually when we do microcontrollers
+实际上，当我们做微控制器时，
+
+um if we write it in intrinsics as
+如果我们用内在函数
+
+opposed to assembly then we are not
+而不是汇编来编写它，那么我们
+
+actually doing anything to address that
+实际上并没有做任何事情来解决这个
+
+problem we still have the original
+问题，我们仍然有原始的
+
+location problem
+位置问题，
+
+um in on X on x86 so far I've written
+在 x86 上的 X 上，到目前为止，我
+
+only intrinsics microphones
+只写了 内在函数麦克风
+
+I'm taking a page from my friends at
+我借鉴了我在
+
+accent impact who did so and if it's
+Accent Impact 的朋友的做法，他们这样做了，如果
+
+good enough for them it's good enough
+他们觉得这足够好，那对我来说也足够好，
+
+for me
+
+um not that they are perfectly happy
+嗯，并不是说他们
+
+with all the compilers handling of
+对编译器对内在函数的处理完全满意，
+
+intrinsics
+
+um but straight off you you make uh it's
+嗯，但你直接说 嗯，
+
+nice not to have to maintain an extra
+很不错 不必保留额外的
+
+thousand dollars
+一千美元，
+
+yeah that makes sense
+是的，这很有意义，
+
+just today I was working with Ben and
+就在今天，我正在与 Ben 合作，
+
+massaging uh
+按摩
+
+msbc to produce a good outcome out of
+msbc，以便从我们的内在账户中产生良好的结果，
+
+our intrinsic accounts
+
+I I I I I I feel that I probably
+我觉得我可能
+
+um
+嗯，
+
+like zoomed in too much on my crown
+像放大了我的皇冠
+
+welcome data training in math morals
+欢迎数据 训练数学道德，
+
+because I really wanted to Encore this
+因为我真的很想重复一下
+
+on something that was fresh in my mind
+我脑海中新鲜的东西，
+
+uh but I I was hoping that some
+但我希望一些
+
+General General
+一般性的
+
+picture would emerge about like how do
+画面会出现，比如
+
+we approach a hard software problem and
+我们如何处理一个困难的软件问题，并
+
+make it tractable I have this metaphor
+使其变得容易处理，我有这个比喻
+
+in my mind of where I handed um a deck
+我脑子里想着我递给嗯一副
+
+of cards it's mixed that's like I'm
+牌，它是混合的，就像我很
+
+enjoying that like a high value cars are
+享受那样，就像一辆高价值的汽车，
+
+like really hard problems and low cost
+就像真正困难的问题和低成本
+
+or easy problems and it's all mixed and
+或简单的问题，这一切都是混合的，
+
+if we go in order we can easily get
+如果我们按顺序进行，我们很容易得到
+
+stuck at the first hard cut that we run
+陷入我们遇到的第一个困难，
+
+into so it's important to reorder our
+所以重新安排我们的
+
+daily calls so that the right things
+日常通话很重要，这样正确的事情就会
+
+come first
+优先考虑，
+
+um and so that's why you know when I say
+这就是为什么你知道当我说
+
+we're making trade-offs between
+我们在
+
+performance and trackability it's kind
+性能和可追踪性之间做出权衡时，这只是
+
+of temporary it's it's more accurate to
+暂时的 这还不止 准确地说，
+
+say we are reordering this so that
+我们正在重新排序，以便
+
+trackable things come first even that if
+可追踪的事情放在首位，即使
+
+that means that we are not aiming for
+这意味着我们不是
+
+Peak Performance first
+首先瞄准峰值性能，
+
+um but like that's that that only allows
+但就像那样，这只能让
+
+us to eventually get to the place where
+我们最终到达
+
+it would be the right time to look at
+合适的时间 看看
+
+the hollow problems at least we don't
+空洞的问题，至少我们不必
+
+have to solve the all the hard problems
+
+at once before we get anything up and
+在开始任何事情之前一次性解决所有的难题，
+
+running
+
+um the lack the lack of the discussion
+嗯，
+
+following this presentation is a strong
+这次演讲之后缺乏讨论，这强烈
+
+suggestion that I got something wrong in
+表明我在演讲中犯了错误
+
+the in the scoping of what I presented
+在介绍我所介绍的内容时，
+
+uh so that should be even more of an
+这应该更像是
+
+invitation for anyone to share uh their
+邀请大家分享他们的
+
+thoughts or purpose a better
+想法或目的，以便进行更好的
+
+conversation
+对话，
+
+we'll have um
+我们会有
+
+other questions about this or um other
+其他关于这个或其他
+
+topics there are a couple of other
+主题的问题，还有其他一些
+
+things
+事情
+
+um that we wanted to point to
+我们想指出
+
+um but
+嗯，但
+
+I'm going to leave it open for a moment
+我暂时不讨论这个问题
+
+um okay well
+嗯好的，
+
+thank you Benoit
+谢谢 Benoit
+
+um
+嗯
+
+next week we're planning to discuss an
+下周我们计划讨论一个
+
+RFC from
+RFC，
+
+um nod uh about uh heterogeneous device
+关于 Erie 的异构设备
+
+usage in Erie
+使用
+
+um so just that's a teaser for that I
+嗯，所以只是 这是一个预告片，我
+
+actually can't find the link right now
+实际上不能 现在就找到链接，
+
+um someone has that link and could post
+嗯，有人有那个链接，可以把
+
+it in the chat that would be very
+它发布在聊天中，这会
+
+helpful
+很有帮助，
+
+um
+嗯，
+
+but we want to make sure uh that we have
+但我们想确保，嗯，我们
+
+been around for that and he is out today
+已经在那里了，他今天不在，
+
+so going to hold off on discussion of
+所以暂时不讨论
+
+that
+
+um
+
+the other
+
+um thing on the agenda was
+议程上的另一件事是
+
+thank you Taya
+感谢塔亚，
+
+um
+
+uh it was just a note on coding style
+这只是关于编码风格的说明，
+
+um this is kind of getting into the
+这有点涉及
+
+details of developer stuff but um we
+开发人员的细节，但
+
+have historically used
+历史上我们一直使用
+
+um
+
+Google formatting for all our code base
+谷歌格式来处理我们所有的代码库
+
+in cling format and in the compiler
+cling 格式，在编译器中
+
+we've used llvm style that was kind of
+我们使用了 llvm 风格，这是
+
+just uh a necessity based on being a
+
+source of Truth in Google's monorepo
+谷歌 monorepo 中作为真相来源的必要条件，
+
+um like the way that cling format is
+就像 cling 格式
+
+configured there
+在那里的配置方式一样，
+
+um
+
+and we really recently had this
+我们最近
+
+realization that we're kind of in a
+意识到我们 '处于一种
+
+weird State
+奇怪的状态，
+
+um and so we are considering and
+所以我们正在考虑并
+
+planning to switch to using lvm style
+计划切换到使用 lvm 样式，
+
+um for all of our or sorry lvm
+嗯，对于我们所有的或抱歉的 lvm
+
+formatting for all of our compiler stuff
+格式，对于我们所有的编译器内容，
+
+that's already in lvm style
+已经是 lvm 样式了，
+
+um and also there's one place of
+而且还有一个不同的地方
+
+difference in terms of recommendations
+在建议方面
+
+around braces that we like braces around
+我们喜欢用括号括住
+
+single line if and four statements that
+单行 if 和四个语句，
+
+we're probably going to
+
+we're probably going to just stop
+我们可能会停止
+
+commenting on that um
+对此进行评论，嗯，
+
+but uh yeah so basically yeah trying to
+但是嗯，所以基本上是的，试图
+
+unify with lvm um if people have any
+与 lvm 统一，嗯，如果人们
+
+concerns about that for some reason
+对 出于某种原因，
+
+um I will likely change the claim format
+我可能会更改声明格式
+
+files run Clank format over everything
+文件，在所有内容上运行 Clank 格式
+
+and then add it in the like get boring
+，然后将其添加到类似获取无聊的
+
+commits.txt or whatever that's called
+commits.txt 或任何名称中，
+
+um
+
+but just so people are not surprised
+但只是为了让人们不感到惊讶，
+
+um
+
+I think that was it for the official
+我认为这就是这样 官方
+
+agenda are there other topics
+议程还有其他话题
+
+um
+吗，
+
+that people wanted to bring to the
+大家想带给
+
+community
+社区的
+
+all right well um I don't have 20
+好吧，嗯，我没有20
+
+minutes of jokes to tell so I think um
+分钟的笑话可以讲，所以我想嗯，
+
+unless there's there's anything else we
+除非还有其他事情，我们
+
+can end early
+可以提前结束，
+
+all right thank you everyone
+好的，谢谢大家
+
+figure out how to stop the recording
+弄清楚 如何在这里停止录音
+
+here
+
+

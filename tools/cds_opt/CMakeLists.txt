@@ -20,6 +20,7 @@ set(LIBS
   ${extension_libs}
 
   CdsPasses # 自己构建的pass
+  CdsPatterns # 自己写的patterns
   MLIROptLib # MLIR opt工具的依赖库
   )
 #   message("dialect_libs:${dialect_libs}\n\n")

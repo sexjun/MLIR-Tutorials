@@ -22,6 +22,8 @@ using namespace llvm;
 // 自己写的pass
 #include "CdsDemo/CdsDemoPasses.h"
 
+#include "CdsDemo/Conversion/Patterns.h"
+
 int main(int argc, char **argv) {
   DialectRegistry registry;
   mlir::registerAllDialects(registry);
@@ -37,5 +39,6 @@ int main(int argc, char **argv) {
 
   // 注册pass
   mlir::cdsdemo::registerPasses();
+  //   register_cdsdemo_patterns()
   return asMainReturnCode(MlirOptMain(argc, argv, "toy-opt-cds", registry));
 }
