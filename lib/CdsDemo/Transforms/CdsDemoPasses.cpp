@@ -26,4 +26,27 @@ class CdsBasePass : public impl::CdsDemoPassBase<CdsBasePass> {
     llvm::outs() << "====================================\n";
   }
 };
+
+#define GEN_PASS_DECL_CONVERTREDUCEMAXTOREUDECEMIN
+#define GEN_PASS_DEF_CONVERTREDUCEMAXTOREUDECEMIN
+#include "CdsDemo/Transforms/CdsDemoPasses.h.inc"
+
+class ConvertReduceMaxToReudeceMin
+    : public impl::ConvertReduceMaxToReudeceMinBase<
+          ConvertReduceMaxToReudeceMin> {
+  using impl::ConvertReduceMaxToReudeceMinBase<
+      ConvertReduceMaxToReudeceMin>::ConvertReduceMaxToReudeceMinBase;
+  void runOnOperation() final {
+    llvm::outs() << "pass name: " << getPassName() << "\n";
+
+    auto ops = getOperation();
+
+    ops->walk([](Operation *child) {
+      llvm::outs() << "\t type:" << child->getName()
+                   << "\t loc:" << child->getLoc() << "\n";
+    });
+
+    llvm::outs() << "====================================\n";
+  }
+};
 } // namespace mlir::cdsdemo

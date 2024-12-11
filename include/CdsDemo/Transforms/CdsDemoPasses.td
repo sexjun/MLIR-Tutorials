@@ -10,4 +10,14 @@ let summary = "My Pass Summary";
   }];
 }
 
+def ConvertReduceMaxToReudeceMin :  Pass<"ConvertReduceMaxToReudeceMin"> {
+    let summary = "My Pass Summary22222";
+    let description = [{
+        Here we can now give a much larger description of `MyPass`, including all of
+        its various constraints and behavior.
+        =====test
+    }];
+
+}
+
 #endif

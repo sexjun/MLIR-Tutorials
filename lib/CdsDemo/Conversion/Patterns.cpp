@@ -7,27 +7,37 @@
 #include "mlir/Dialect/Tensor/IR/Tensor.h"
 #include "mlir/Dialect/Tensor/Utils/Utils.h"
 #include "mlir/Dialect/Tosa/IR/TosaOps.h"
+#include "mlir/IR/MLIRContext.h"
+#include "mlir/IR/PatternMatch.h"
 #include "llvm/Support/LogicalResult.h"
+#include <cstdint>
 
 namespace mlir::cdsdmeo {
 
-struct ConversionAddToMul final : public OpRewritePattern<tosa::AddOp> {
+struct ConversionReduceMinToReduceMax final
+    : public OpRewritePattern<tosa::ReduceMinOp> {
   using OpRewritePattern::OpRewritePattern;
 
-  LogicalResult matchAndRewrite(tosa::AddOp addOp,
+  LogicalResult matchAndRewrite(tosa::ReduceMinOp reduceMinOp,
                                 PatternRewriter &rewriter) const override {
-    if (addOp->hasSuccessors()) {
-      rewriter.replaceOp(addOp, tosa::MulOp());
-      return success();
-    } else {
-      return llvm::failure();
-    }
+    // 获取reducemin操作的输入张量
+    Value input = reduceMinOp.getInput();
+
+    // 获取是否保持维度的属性，通过检查操作的属性字典
+    // 创建一个新的tosa方言下的ReduceMaxOp，参数与原ReduceMinOp保持一致
+    auto reduceMaxOp = rewriter.create<tosa::ReduceMaxOp>(
+        reduceMinOp.getLoc(), input, reduceMinOp.getAxis());
+
+    // 用新创建的ReduceMaxOp替换原有的ReduceMinOp
+    rewriter.replaceOp(reduceMinOp, reduceMaxOp.getResult());
+
+    return success();
   }
 };
 
 void register_cdsdemo_patterns(MLIRContext *context,
                                RewritePatternSet &patterns) {
-  patterns.insert<ConversionAddToMul>(context);
+  patterns.insert<ConversionReduceMinToReduceMax>(context);
 };
 
 } // namespace mlir::cdsdmeo
