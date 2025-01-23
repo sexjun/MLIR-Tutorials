@@ -1,0 +1,10 @@
+add_mlir_library(
+    CdsAnalysis
+    CdsAnalysis.cpp
+    DEPENDS
+    LLVMSupport
+    MLIRAnalysis
+    MLIRIR
+    MLIRPass
+    MLIRSupport
+)

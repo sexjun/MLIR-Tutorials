@@ -21,16 +21,16 @@ set(LIBS
 
   CdsPasses # 自己构建的pass
   CdsPatterns # 自己写的patterns
+  CdsAnalysis # 自己写的analysis
   MLIROptLib # MLIR opt工具的依赖库
   )
-#   message("dialect_libs:${dialect_libs}\n\n")
 
-#   message("conversion_libs:${conversion_libs}\n\n")
 
-#   message("extension_libs:${extension_libs}\n\n")
-
-add_mlir_tool(cds-opt cds-opt.cpp DEPENDS ${LIBS})
+message("==============================")
+message("gen cds-opt")
+add_llvm_executable(cds-opt cds-opt.cpp  DEPENDS ${LIBS})
 target_link_libraries(cds-opt
-    PRIVATE
-    ${LIBS}
+PRIVATE
+${LIBS}
 )
+message("==============================")
